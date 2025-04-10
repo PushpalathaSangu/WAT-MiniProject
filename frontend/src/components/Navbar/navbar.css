@@ -1,0 +1,6 @@
+.active-link {
+    border-bottom: 3px solid #facc15; /* Tailwind yellow-300 */
+    font-weight: bold;
+    margin-top: 0;
+  }
+  
