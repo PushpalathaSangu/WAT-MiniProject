@@ -1,1 +1,1 @@
-# WAT
+# WAT (Weekly Assesment Test)
