@@ -3,18 +3,16 @@ import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import './navbar.css';
 import WAT_ABSTRACT from '../../assets/WAT_ABSTRACT.pdf';
-import Login from '../../pages/Login/Login';
-import Signup from '../../pages/Signup/Signup';
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const location = useLocation();
 
   const navItems = [
     { name: 'About', to: '/' },
-    {name: 'Register',to:'/signup'},
     { name: 'Login', to: '/login' },
-   
   ];
 
   return (
@@ -55,10 +53,53 @@ const Navbar = () => {
               {name}
             </Link>
           ))}
-         {/* Download Link */}
-          <button
-            className="bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition duration-300"
-          >
+
+          {/* Register Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setIsRegisterOpen(!isRegisterOpen)}
+              className="block md:inline-block px-3 py-2 transition duration-200 hover:text-yellow-300 focus:outline-none"
+            >
+              Register
+            </button>
+            {isRegisterOpen && (
+              <div className="absolute mt-2 w-48 bg-white text-black rounded-md shadow-lg z-50">
+                <Link
+                  to="/studentregister"
+                  className="block px-4 py-2 hover:bg-gray-200"
+                  onClick={() => {
+                    setIsRegisterOpen(false);
+                    setIsOpen(false);
+                  }}
+                >
+                  Student
+                </Link>
+                <Link
+                  to="/facultyregister"
+                  className="block px-4 py-2 hover:bg-gray-200"
+                  onClick={() => {
+                    setIsRegisterOpen(false);
+                    setIsOpen(false);
+                  }}
+                >
+                  Faculty
+                </Link>
+                <Link
+                  to="/adminregister"
+                  className="block px-4 py-2 hover:bg-gray-200"
+                  onClick={() => {
+                    setIsRegisterOpen(false);
+                    setIsOpen(false);
+                  }}
+                >
+                  Admin
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Download Link */}
+          <button className="bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
             <a
               href={WAT_ABSTRACT}
               target="_blank"
@@ -68,7 +109,6 @@ const Navbar = () => {
               WAT TIMETABLE
             </a>
           </button>
-
         </div>
       </div>
     </nav>

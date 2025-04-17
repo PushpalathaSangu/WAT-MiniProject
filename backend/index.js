@@ -1,14 +1,27 @@
-const express =require("express");
-const app=express();
-const cors=require("cors");
 require("dotenv").config();
-require("./conn/conn");
-app.use(express.json());
-app.use(cors());
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./conn/conn");
+const facultyRoutes = require("./routes/facultyRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const studentRoutes=require("./routes/studentRoutes");
+const userAuth=require("./routes/authRoutes");
+const watRoutes = require('./routes/watRoutes'); // Adjust path if needed
 
-app.get('/',(req,res)=>{
-    res.send("Hello from backend side");
-})
-app.listen(process.env.PORT,()=>{
-    console.log(`Server started at the port ${process.env.PORT}`);
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(express.json());
+
+connectDB();
+
+app.use("/student",studentRoutes);
+app.use("/faculty", facultyRoutes);
+app.use("/admin", adminRoutes);
+app.use("/auth",userAuth);
+app.use('/api/wats', watRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

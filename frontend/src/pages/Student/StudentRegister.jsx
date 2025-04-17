@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "./Signup.css";
 import image2 from "../../assets/image3.jpeg";
+import axios from "axios";
 
-const Signup = () => {
+const StudentRegister = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     year: "",
+    semester: "",
     section: "",
     studentId: "",
     rollNumber: "",
@@ -26,21 +29,24 @@ const Signup = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "*Name is required";
+
     if (!formData.email.trim()) newErrors.email = "*Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "*Email is invalid";
+    else if (!/^rr\d{6}@rguktrkv\.ac\.in$/i.test(formData.email))
+      newErrors.email = "*Email must be in format rrXXXXXX@rguktrkv.ac.in";
 
     if (!formData.password.trim()) newErrors.password = "*Password is required";
     else if (formData.password.length < 6)
       newErrors.password = "*Password must be at least 6 characters";
 
     if (!formData.year) newErrors.year = "*Please select your year";
+    if (!formData.semester) newErrors.semester = "*Please select your semester";
+
     if (!formData.section) newErrors.section = "*Please select your section";
 
     if (!formData.studentId.trim())
       newErrors.studentId = "*Student ID is required";
-    else if (!/^R2\d{6}$/i.test(formData.studentId))
-      newErrors.studentId = "*Student ID must be in format R2XXXXXX";
+    else if (!/^R\d{6}$/i.test(formData.studentId))
+      newErrors.studentId = "*Student ID must be in format RXXXXXX";
 
     if (!formData.rollNumber.trim())
       newErrors.rollNumber = "*Roll Number is required";
@@ -57,10 +63,17 @@ const Signup = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Form Submitted Successfully:", formData);
+      try {
+        const response = await axios.post("http://localhost:5000/student/register", formData);
+        console.log("Registration successful", response.data);
+        navigate("/login"); // ✅ Redirect to login page
+      } catch (err) {
+        console.error("Registration failed:", err);
+        alert("Registration failed. Please try again.");
+      }
     }
   };
 
@@ -82,7 +95,7 @@ const Signup = () => {
       <div className="w-full md:w-1/2 bg-sky-500 flex items-center justify-center p-4">
         <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-sky-500 mb-4 text-center">
-            Create Account
+            Student Registration
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-3 text-black">
@@ -99,7 +112,7 @@ const Signup = () => {
             <input
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="rrXXXXXX@rguktrkv.ac.in"
               value={formData.email}
               onChange={handleChange}
               className="w-full border border-gray-300 p-2 rounded"
@@ -107,16 +120,15 @@ const Signup = () => {
             {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
 
             <div className="relative">
-            <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
-            autoComplete="new-password"
-            />
-
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+                autoComplete="new-password"
+              />
               <span
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
@@ -129,27 +141,47 @@ const Signup = () => {
             <input
               type="text"
               name="studentId"
-              placeholder="Student ID (R2XXXXXX)"
+              placeholder="Student ID (RXXXXXX)"
               value={formData.studentId}
               onChange={handleChange}
               className="w-full border border-gray-300 p-2 rounded"
             />
             {errors.studentId && <p className="text-red-500 text-xs">{errors.studentId}</p>}
 
-            <select
-              name="year"
-              value={formData.year}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-            >
-              <option value="">Year</option>
-              <option value="E1">E1</option>
-              <option value="E2">E2</option>
-              <option value="E3">E3</option>
-              <option value="E4">E4</option>
-            </select>
-            {errors.year && <p className="text-red-500 text-xs">{errors.year}</p>}
+            {/* Year & Semester */}
+            <div className="flex space-x-2">
+              <div className="w-1/2">
+                <select
+                  name="year"
+                  value={formData.year}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                >
+                  <option value="">Year</option>
+                  <option value="E1">E1</option>
+                  <option value="E2">E2</option>
+                  <option value="E3">E3</option>
+                  <option value="E4">E4</option>
+                </select>
+                {errors.year && <p className="text-red-500 text-xs">{errors.year}</p>}
+              </div>
 
+              <div className="w-1/2">
+                <select
+                  name="semester"
+                  value={formData.semester}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                >
+                  <option value="">Semester</option>
+                  <option value="sem1">Sem1</option>
+                  <option value="sem2">Sem2</option>
+                </select>
+                {errors.semester && <p className="text-red-500 text-xs">{errors.semester}</p>}
+              </div>
+            </div>
+
+            {/* Section & Roll No */}
             <div className="flex space-x-2">
               <div className="w-1/2">
                 <select
@@ -170,14 +202,12 @@ const Signup = () => {
 
               <div className="w-1/2">
                 <input
-                  type="number"
+                  type="text"
                   name="rollNumber"
-                  placeholder="Roll No (1-72)"
+                  placeholder="Roll Number (1-72)"
                   value={formData.rollNumber}
                   onChange={handleChange}
                   className="w-full border border-gray-300 p-2 rounded"
-                  min="1"
-                  max="72"
                 />
                 {errors.rollNumber && <p className="text-red-500 text-xs">{errors.rollNumber}</p>}
               </div>
@@ -186,18 +216,15 @@ const Signup = () => {
             <input
               type="text"
               name="phone"
-              placeholder="Phone Number"
+              placeholder="Phone Number (10 digits)"
               value={formData.phone}
               onChange={handleChange}
               className="w-full border border-gray-300 p-2 rounded"
             />
             {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
 
-            <button
-              type="submit"
-              className="w-full bg-sky-500 text-white py-2 rounded hover:bg-sky-600 transition"
-            >
-              SIGN UP
+            <button type="submit" className="w-full bg-sky-500 text-white py-2 rounded">
+              Register
             </button>
           </form>
         </div>
@@ -206,4 +233,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default StudentRegister;

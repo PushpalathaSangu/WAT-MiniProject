@@ -1,10 +1,16 @@
-const mongoose=require("mongoose");
-const conn=async ()=>{
-    try{
-        await mongoose.connect(`${process.env.URI}`);
-        console.log("connected to database successfully");
-    }catch(error){
-        console.log(error);
-    }
-}
-conn();
+// conn/conn.js
+const mongoose = require("mongoose");
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.URI, {
+      
+    });
+    console.log("✅ Connected to MongoDB Atlas successfully");
+  } catch (error) {
+    console.error("❌ MongoDB connection failed:", error.message);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB; // ✅ Export the function instead of calling it

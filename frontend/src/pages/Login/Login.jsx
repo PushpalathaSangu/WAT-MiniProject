@@ -1,11 +1,13 @@
-import image1 from '../../assets/image1.jpg';
-import { Link } from 'react-router-dom';
-import './Login.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import React from 'react';
+import axios from 'axios';
+import image1 from '../../assets/image1.jpg';
+import './Login.css';
 
 function Login() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,9 +22,10 @@ function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  // Validation function
   const validate = () => {
     let valid = true;
-    let newErrors = { email: "", password: "", userType: "" };
+    const newErrors = { email: "", password: "", userType: "" };
 
     if (!formData.email.trim()) {
       newErrors.email = "* Email is required";
@@ -46,38 +49,74 @@ function Login() {
     return valid;
   };
 
+  // Form change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: value ? "" : prevErrors[name],
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    setErrors(prev => ({
+      ...prev,
+      [name]: value ? "" : prev[name]
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Form submit handler
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validate()) {
-      alert(`Login successful as ${formData.userType}!`);
+      try {
+        const response = await axios.post('http://localhost:5000/auth/login', {
+          email: formData.email,
+          password: formData.password,
+          role: formData.userType.toLowerCase()
+        });
+        console.log(response)
+        localStorage.setItem("token", response.data.token); // store JWT
+        localStorage.setItem("user",response.data.user);
+        alert(response.data.message);
 
-      setFormData({
-        email: "",
-        password: "",
-        userType: ""
-      });
+        // Navigate based on role
+        switch (formData.userType) {
+          case 'Student':
+            navigate('/student-dashboard');
+            break;
+          case 'Faculty':
+            navigate('/faculty-dashboard');
+            break;
+          case 'Admin':
+            navigate('/admin-dashboard');
+            break;
+          default:
+            navigate('/')
+            break;
+        }
+       
+        // Reset form
+        setFormData({ email: "", password: "", userType: "" });
+        setErrors({ email: "", password: "", userType: "" });
 
-      setErrors({
-        email: "",
-        password: "",
-        userType: ""
-      });
+        setShowPassword(false);
+
+      } catch (err) {
+        if (err.response?.data?.message) {
+          alert(err.response.data.message);
+        } else {
+          alert("Login failed. Please try again.");
+          console.log(err);
+        }
+      }
     }
   };
 
   return (
     <div className='min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-100 p-4'>
-      {/* Left Side - Image */}
+      
+      {/* Left Side - Welcome Section */}
       <div className="w-full md:w-2/5 p-4 flex flex-col items-center bg-blue-200 rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none">
         <h1 className="text-2xl font-bold mb-2 text-blue-900">Welcome Back</h1>
         <img src={image1} alt="Welcome" className="w-64 h-48 object-cover rounded-xl mb-3 shadow-md" />
@@ -89,17 +128,17 @@ function Login() {
         </p>
       </div>
 
-      {/* Right Side - Form */}
+      {/* Right Side - Login Form */}
       <div className='w-full md:w-2/5 bg-white p-6 shadow-md rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none'>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <h1 className='text-2xl font-bold mb-4 text-center'>Login</h1>
 
-          {/* Email Field */}
+          {/* Email Input */}
           <div className='mb-3'>
             <input
               type='email'
-              placeholder='Email'
               name="email"
+              placeholder='Email'
               value={formData.email}
               onChange={handleChange}
               className='w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm'
@@ -107,18 +146,17 @@ function Login() {
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
-          {/* Password Field */}
+          {/* Password Input */}
           <div className='mb-3 relative'>
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
-            autoComplete="new-password"
-          />
-
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border border-gray-300 p-2 rounded"
+              autoComplete="new-password"
+            />
             <span
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
@@ -128,7 +166,7 @@ function Login() {
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
 
-          {/* User Type Dropdown */}
+          {/* Role Selection */}
           <div className='mb-4'>
             <select
               name="userType"
@@ -144,6 +182,7 @@ function Login() {
             {errors.userType && <p className="text-red-500 text-xs mt-1">{errors.userType}</p>}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className='w-full bg-blue-600 text-white py-2 rounded text-sm hover:bg-blue-700 transition duration-300'
