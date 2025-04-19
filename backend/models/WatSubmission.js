@@ -1,10 +1,42 @@
+// models/WatSubmission.js
 const mongoose = require('mongoose');
 
-const WatSubmissionSchema = new mongoose.Schema({
-  watId: { type: mongoose.Schema.Types.ObjectId, ref: 'WAT', required: true },
-  studentId: { type: String, required: true }, // or ObjectId if you have a Student model
-  answers: [String],
-  submittedAt: { type: Date, default: Date.now }
+const watSubmissionSchema = new mongoose.Schema({
+  watId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'WAT',
+    required: true
+  },
+  studentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Student',
+    required: true
+  },
+  answers: {
+    type: [
+      {
+        questionId: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true
+        },
+        selectedOption: {
+          type: String,
+          required: true
+        }
+      }
+    ],
+    required: true
+  },
+  score: {
+    type: Number,
+    required: true
+  },
+  submittedAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-module.exports = mongoose.model('WatSubmission', WatSubmissionSchema);
+watSubmissionSchema.index({ watId: 1, studentId: 1 }, { unique: true });
+
+module.exports = mongoose.model('WatSubmission', watSubmissionSchema);

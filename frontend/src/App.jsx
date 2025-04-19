@@ -14,8 +14,15 @@ import Faculty from './pages/Faculty/Faculty.jsx';
 import Admin from './pages/Admin/Admin.jsx';
 
 import CreateWATPage from './pages/Faculty/CreateWatPage.jsx';
-import StudentWATs from './pages/Student/StudentWats.jsx'; // ✅ Import StudentWATs
+
 import WATAttemptPage from './pages/Student/WatAttemptPage.jsx';
+import About from './pages/About/About.jsx';
+
+import AdminProfile from './pages/Admin/AdminProfile.jsx';
+import UpdateProfile from './pages/Admin/UpdateProfile.jsx';
+import Subjects from './pages/Admin/Subjects.jsx';
+import StudentDetails from './pages/Admin/StudentDetails.jsx';
+import FacultyDetails from './pages/Admin/FacultyDetails.jsx'
 
 const App = () => {
   const location = useLocation();
@@ -27,6 +34,7 @@ const App = () => {
       <main className="flex-grow pt-20">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/studentregister" element={<StudentRegister />} />
           <Route path="/facultyregister" element={<FacultyRegister />} />
@@ -36,9 +44,15 @@ const App = () => {
           <Route path="/faculty-dashboard" element={<Faculty />} />
           <Route path="/admin-dashboard" element={<Admin />} />
 
+          <Route path="/admin/profile" element={<AdminProfile />} />
+          <Route path="/admin/update-profile" element={<UpdateProfile/>} />
+          <Route path="/admin/subjects" element={<Subjects />} />
+          <Route path="/admin/students" element={<StudentDetails />} />
+          <Route path="/admin/faculty" element={<FacultyDetails />} />
+
           <Route path="/create-wat" element={<CreateWATPage />} />
-          <Route path="/student-wats" element={<StudentWATs />} /> {/* ✅ Added route */}
-          <Route path="/wat/:id" element={<WATAttemptPage />} />
+     
+          <Route path="/wats/:id" element={<WATAttemptPage />} />
         </Routes>
       </main>
       {!isAuthPage && <Footer />}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import image2 from "../../assets/imag35.jpeg";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash, FaUserShield } from "react-icons/fa";
+import adminRegisterImage from "../../assets/imag35.jpeg";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 const AdminRegister = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,27 +15,48 @@ const AdminRegister = () => {
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(""); // State for success message
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "*Name is required";
-    if (!formData.email.trim()) newErrors.email = "*Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "*Email is invalid";
+    
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
 
-    if (!formData.password.trim()) newErrors.password = "*Password is required";
-    else if (formData.password.length < 6)
-      newErrors.password = "*Password must be at least 6 characters";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
+    }
 
-    if (!formData.contact.trim()) newErrors.contact = "*Contact number is required";
-    else if (!/^\d{10}$/.test(formData.contact))
-      newErrors.contact = "*Contact number must be 10 digits";
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    if (!formData.contact.trim()) {
+      newErrors.contact = "Contact number is required";
+    } else if (!/^\d{10}$/.test(formData.contact)) {
+      newErrors.contact = "Contact number must be 10 digits";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -43,117 +64,162 @@ const AdminRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      try {
-        const res = await axios.post("http://localhost:5000/admin/register", {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          contactNumber: formData.contact,
-        });
+    if (!validate()) return;
 
-        if (res.data.success) {
-          setSuccessMessage("✅ Successfully registered!"); // Display success message
-          setFormData({ name: "", email: "", password: "", contact: "" });
-          setErrors({});
+    setIsLoading(true);
+    try {
+      const res = await axios.post("http://localhost:5000/admin/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        contactNumber: formData.contact,
+      });
+
+      if (res.data.success) {
+        setSuccessMessage("✅ Admin account created successfully!");
+        setTimeout(() => {
           navigate('/login');
-          
-        }
-      } catch (error) {
-        if (error.response?.data?.message) {
-          setErrors({ email: error.response.data.message });
-        } else {
-          console.error("Error:", error);
-        }
+        }, 1500);
+        setFormData({ name: "", email: "", password: "", contact: "" });
+        setErrors({});
       }
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Registration failed. Please try again.";
+      setErrors({ server: errorMsg });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
-      {/* Left Side */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-6">
-        <h1 className="text-3xl font-bold text-sky-500 mb-4">Welcome Admin</h1>
-        <img src={image2} alt="Signup Visual" className="h-40 w-auto mb-4" />
-        <p className="text-sm">
-          Already registered?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Login
-          </Link>
-        </p>
-      </div>
-
-      {/* Right Side - Form */}
-      <div className="w-full md:w-1/2 bg-sky-500 flex items-center justify-center p-4">
-        <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-sky-500 mb-4 text-center">
-            Admin Registration
-          </h2>
-
-          {/* Success Message */}
-          {successMessage && (
-            <p className="text-green-500 text-center mb-4">{successMessage}</p>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-3 text-black">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-            />
-            {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-            />
-            {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
-
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full border border-gray-300 p-2 rounded"
-                autoComplete="new-password"
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-              >
-                {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
-              </span>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 p-4">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+        {/* Left Side - Welcome Section */}
+        <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 p-8 text-white flex flex-col items-center justify-center">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaUserShield className="text-blue-600 text-3xl" />
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password}</p>
+            <h1 className="text-3xl font-bold mb-2">Admin Registration</h1>
+           
+          </div>
+          
+          <img 
+            src={adminRegisterImage} 
+            alt="Admin registration" 
+            className="w-64 h-64 object-cover mb-8 rounded-lg shadow-lg border-4 border-white transform hover:scale-105 transition duration-300"
+          />
+          
+          <p className="text-center text-blue-100">
+            Already have an account?{' '}
+            <Link 
+              to="/login" 
+              className="font-semibold text-white hover:underline transition"
+            >
+              Login here
+            </Link>
+          </p>
+        </div>
+
+        {/* Right Side - Registration Form */}
+        <div className="w-full md:w-1/2 p-8 md:p-10 flex flex-col justify-center">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {errors.server && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {errors.server}
+              </div>
             )}
 
-            <input
-              type="text"
-              name="contact"
-              placeholder="Contact Number"
-              value={formData.contact}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-            />
-            {errors.contact && (
-              <p className="text-red-500 text-xs">{errors.contact}</p>
+            {successMessage && (
+              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                {successMessage}
+              </div>
             )}
 
+            {/* Name Field */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name:
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Enter name"
+                value={formData.name}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+              />
+              {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+            </div>
+
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address:
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="admin@gmail.com"
+                value={formData.email}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+              />
+              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Password:
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
+            </div>
+
+            {/* Contact Field */}
+            <div>
+              <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-1">
+                Contact Number:
+              </label>
+              <input
+                id="contact"
+                type="text"
+                name="contact"
+                placeholder="9876543210"
+                value={formData.contact}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 rounded-lg border ${errors.contact ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+              />
+              {errors.contact && <p className="mt-1 text-sm text-red-600">{errors.contact}</p>}
+            </div>
+
+            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-sky-500 hover:bg-sky-600 text-white p-2 rounded"
+              disabled={isLoading}
+              className={`w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
             >
-              Register
+              {isLoading ? 'Creating Account...' : 'Register'}
             </button>
           </form>
         </div>

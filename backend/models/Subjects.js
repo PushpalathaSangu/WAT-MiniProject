@@ -2,19 +2,19 @@ const mongoose = require('mongoose');
 
 const subjectSchema = new mongoose.Schema({
   year: {
-    type: Number,
+    type: String,
     required: true,
-    enum: [1, 2, 3, 4], // assuming 4 years
+    enum: ['E1', 'E2', 'E3', 'E4'], 
   },
   semester: {
-    type: Number,
+    type: String,
     required: true,
-    enum: [1, 2], // sem1 and sem2
+    enum: ['sem1', 'sem2'],
   },
   subjects: [
     {
-      code: { type: String, required: true },  // e.g., "CS201"
-      name: { type: String, required: true }   // e.g., "Data Structures"
+      code: { type: String },  
+      name: { type: String, required: true }   
     }
   ]
 }, { timestamps: true });

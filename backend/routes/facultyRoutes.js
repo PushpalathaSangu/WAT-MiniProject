@@ -86,19 +86,20 @@ router.post("/login", async (req, res) => {
 });
 
 // Get faculty profile
-router.get("/facultyprofile", async (req, res) => {
+// Get faculty profile
+router.get('/profile', async (req, res) => {
   try {
-    const token = req.headers["authorization"];
-    if (!token || !token.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Invalid or missing token" });
+    const token = req.headers['authorization'];
+    if (!token || !token.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Invalid or missing token' });
     }
 
-    const jwtToken = token.split(" ")[1];
-    const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET || "secretKey");
+    const jwtToken = token.split(' ')[1];
+    const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET || 'secretKey');
 
     const faculty = await Faculty.findById(decoded.facultyId);
     if (!faculty) {
-      return res.status(404).json({ message: "Faculty not found" });
+      return res.status(404).json({ message: 'Faculty not found' });
     }
 
     res.status(200).json({
@@ -109,10 +110,41 @@ router.get("/facultyprofile", async (req, res) => {
       subjects: faculty.subjects,
     });
   } catch (error) {
-    console.error("Profile Fetch Error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Profile Fetch Error:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
+
+// router.get("/profile", async (req, res) => {
+//   try {
+//     const token = req.headers["authorization"];
+//     if (!token || !token.startsWith("Bearer ")) {
+//       return res.status(401).json({ message: "Invalid or missing token" });
+//     }
+
+//     const jwtToken = token.split(" ")[1];
+//     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET || "secretKey");
+
+//     const faculty = await Faculty.findById(decoded.facultyId);
+//     if (!faculty) {
+//       return res.status(404).json({ message: "Faculty not found" });
+//     }
+
+//     res.status(200).json({
+//       name: faculty.name,
+//       email: faculty.email,
+//       contact: faculty.contact,
+//       years: faculty.years,
+//       subjects: faculty.subjects,
+//     });
+//   } catch (error) {
+//     console.error("Profile Fetch Error:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+
+
 
 // Update faculty profile
 router.put("/update-profile", async (req, res) => {
