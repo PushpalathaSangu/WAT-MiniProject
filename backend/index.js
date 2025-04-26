@@ -17,13 +17,24 @@ app.use(express.json());
 
 connectDB();
 
-app.use("/student",studentRoutes);
+app.use('/students', studentRoutes);
 app.use("/faculty", facultyRoutes);
 app.use("/admin", adminRoutes);
 app.use("/auth",userAuth);
 app.use('/api/wats', watRoutes);
 
 app.use('/api/subjects', subjectRoutes);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    error: 'Internal Server Error',
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

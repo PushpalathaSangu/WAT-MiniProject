@@ -2,6 +2,8 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Student = require("../models/Student");
+const mongoose = require('mongoose');
+const Faculty = require('../models/Faculty');
 const { authorizeRole } = require("../middleware/authorizeRole");
 const verifyToken = require("../middleware/verifyToken"); // You need this middleware to get req.user
 
@@ -110,6 +112,56 @@ router.get("/profile", verifyToken, authorizeRole("student"), async (req, res) =
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+// Middleware to validate ObjectId
+const validateObjectId = (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.facultyId)) {
+    return res.status(400).json({ 
+      success: false,
+      error: 'Invalid faculty ID format' 
+    });
+  }
+  next();
+};
+
+
+
+// Route to get student by ID
+router.get('/student/:id', async (req, res) => {
+  const studentId = req.params.id;
+
+  // Validate ObjectId before using it in the query
+  if (!mongoose.Types.ObjectId.isValid(studentId)) {
+    return res.status(400).json({ message: 'Invalid student ID' });
+  }
+
+  try {
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(200).json(student);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error fetching student' });
+  }
+});
+
+// Route to get students by year
+router.get('/year/:year', async (req, res) => {
+  const { year } = req.params;
+
+  try {
+    const students = await Student.find({ year: year });
+
+    res.json({ students });
+  } catch (error) {
+    console.error('Error fetching students:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 // ✅ Update Profile Route
 router.put("/update-profile", verifyToken, authorizeRole("student"), async (req, res) => {

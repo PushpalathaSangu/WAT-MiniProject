@@ -22,7 +22,13 @@ import AdminProfile from './pages/Admin/AdminProfile.jsx';
 import UpdateProfile from './pages/Admin/UpdateProfile.jsx';
 import Subjects from './pages/Admin/Subjects.jsx';
 import StudentDetails from './pages/Admin/StudentDetails.jsx';
-import FacultyDetails from './pages/Admin/FacultyDetails.jsx'
+import FacultyDetails from './pages/Admin/FacultyDetails.jsx';
+import FacultyProfile from './pages/Faculty/FacultyProfile.jsx';
+import FacultyUpdateProfile from './pages/Faculty/FacultyUpdateProfile.jsx';
+import ViewWat from './pages/Faculty/ViewWat.jsx';
+import StudentsDetails from './pages/Faculty/StudentsDetails.jsx';
+import StudentYearDetails from './pages/Faculty/StudentYearDetails.jsx'; 
+
 
 const App = () => {
   const location = useLocation();
@@ -42,16 +48,22 @@ const App = () => {
 
           <Route path="/student-dashboard" element={<Student />} />
           <Route path="/faculty-dashboard" element={<Faculty />} />
+          <Route path="/faculty/profile" element={<FacultyProfile />} />
+          <Route path="/faculty/update-profile" element={<FacultyUpdateProfile />} />
+          <Route path="create-wat" element={<CreateWATPage />} />
+          <Route path="/faculty/view-wats" element={<ViewWat />} />
+          
+          <Route path="/faculty/students" element={<StudentsDetails />} />
+          <Route path="/faculty/students/year/:year" element={<StudentYearDetails />} />
+
+
           <Route path="/admin-dashboard" element={<Admin />} />
 
           <Route path="/admin/profile" element={<AdminProfile />} />
-          <Route path="/admin/update-profile" element={<UpdateProfile/>} />
+          <Route path="/admin/update-profile" element={<UpdateProfile />} />
           <Route path="/admin/subjects" element={<Subjects />} />
           <Route path="/admin/students" element={<StudentDetails />} />
           <Route path="/admin/faculty" element={<FacultyDetails />} />
-
-          <Route path="/create-wat" element={<CreateWATPage />} />
-     
           <Route path="/wats/:id" element={<WATAttemptPage />} />
         </Routes>
       </main>
