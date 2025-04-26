@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash, FaUserGraduate, FaUserTie, FaUserShield } from 'react-icons/fa';
 import axios from 'axios';
 import loginImage from '../../assets/image1.jpg';
-import './Login.css';
+
 
 function Login() {
   const navigate = useNavigate();
