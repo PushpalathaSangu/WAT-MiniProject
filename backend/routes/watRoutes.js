@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const WAT = require('../models/WAT');
+const WAT = require('../models/Wat');
 const WatSubmission = require('../models/WatSubmission');
 
 // create a new WAT
