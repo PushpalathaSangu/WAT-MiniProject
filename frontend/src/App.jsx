@@ -47,14 +47,17 @@ const App = () => {
           <Route path="/adminregister" element={<AdminRegister />} />
 
           <Route path="/student-dashboard" element={<Student />} />
-          <Route path="/faculty-dashboard" element={<Faculty />} />
-          <Route path="/faculty/profile" element={<FacultyProfile />} />
-          <Route path="/faculty/update-profile" element={<FacultyUpdateProfile />} />
-          <Route path="create-wat" element={<CreateWATPage />} />
-          <Route path="/faculty/view-wats" element={<ViewWat />} />
           
+          
+          <Route path="create-wat" element={<CreateWATPage />} />
+          
+          
+          <Route path="/faculty-dashboard" element={<Faculty />} />
           <Route path="/faculty/students" element={<StudentsDetails />} />
           <Route path="/faculty/students/year/:year" element={<StudentYearDetails />} />
+          <Route path="/faculty/view-wats" element={<ViewWat />} />
+          <Route path="/faculty/profile" element={<FacultyProfile />} />
+          <Route path="/faculty/update-profile" element={<FacultyUpdateProfile />} />
 
 
           <Route path="/admin-dashboard" element={<Admin />} />

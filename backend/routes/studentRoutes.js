@@ -1,32 +1,17 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Student = require("../models/Student");
 const mongoose = require('mongoose');
+const Student = require("../models/Student");
 const Faculty = require('../models/Faculty');
 const { authorizeRole } = require("../middleware/authorizeRole");
 const verifyToken = require("../middleware/verifyToken"); // You need this middleware to get req.user
 
 const router = express.Router();
 
-// ✅ Login-protected route
-router.get("/login", authorizeRole("student"), (req, res) => {
-  res.json({ message: `Welcome, Student ${req.user.id}` });
-});
-
 // ✅ Student Registration Route
 router.post("/register", async (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    year,
-    semester,
-    section,
-    studentId,
-    rollNumber,
-    phone,
-  } = req.body;
+  const { name, email, password, year, semester, section, studentId, rollNumber, phone } = req.body;
 
   try {
     const existingStudent = await Student.findOne({ email });
@@ -98,6 +83,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// ✅ Protected Welcome Route after login (token-based)
+router.get("/welcome", verifyToken, authorizeRole("student"), (req, res) => {
+  res.json({ message: `Welcome, Student ${req.user.studentId}` });
+});
 
 // ✅ Get Logged-in Student Profile
 router.get("/profile", verifyToken, authorizeRole("student"), async (req, res) => {
@@ -112,56 +101,6 @@ router.get("/profile", verifyToken, authorizeRole("student"), async (req, res) =
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
-// Middleware to validate ObjectId
-const validateObjectId = (req, res, next) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.facultyId)) {
-    return res.status(400).json({ 
-      success: false,
-      error: 'Invalid faculty ID format' 
-    });
-  }
-  next();
-};
-
-
-
-// Route to get student by ID
-router.get('/student/:id', async (req, res) => {
-  const studentId = req.params.id;
-
-  // Validate ObjectId before using it in the query
-  if (!mongoose.Types.ObjectId.isValid(studentId)) {
-    return res.status(400).json({ message: 'Invalid student ID' });
-  }
-
-  try {
-    const student = await Student.findById(studentId);
-    if (!student) {
-      return res.status(404).json({ message: 'Student not found' });
-    }
-    res.status(200).json(student);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error fetching student' });
-  }
-});
-
-// Route to get students by year
-router.get('/year/:year', async (req, res) => {
-  const { year } = req.params;
-
-  try {
-    const students = await Student.find({ year: year });
-
-    res.json({ students });
-  } catch (error) {
-    console.error('Error fetching students:', error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
-
 
 // ✅ Update Profile Route
 router.put("/update-profile", verifyToken, authorizeRole("student"), async (req, res) => {
@@ -186,28 +125,53 @@ router.put("/update-profile", verifyToken, authorizeRole("student"), async (req,
 
 // ✅ Logout Route (optional – frontend should just remove token)
 router.post("/logout", (req, res) => {
-  // If you're not using sessions, simply inform frontend to delete token
   res.json({ message: "Logout successful" });
 });
 
+// ✅ Get Student by ID
+router.get('/student/:id', async (req, res) => {
+  const studentId = req.params.id;
 
+  if (!mongoose.Types.ObjectId.isValid(studentId)) {
+    return res.status(400).json({ message: 'Invalid student ID' });
+  }
 
+  try {
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(200).json(student);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error fetching student' });
+  }
+});
 
+// ✅ Get Students by Year
+router.get('/year/:year', async (req, res) => {
+  const { year } = req.params;
 
+  try {
+    const students = await Student.find({ year });
+    res.json({ students });
+  } catch (error) {
+    console.error('Error fetching students:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
 
-
-
-// Get student details with WAT marks
-router.get('/:studentId', async (req, res) => {
+// ✅ Get student details with WAT marks
+router.get('/:studentId/wat-marks', async (req, res) => {
   try {
     const student = await Student.findById(req.params.studentId)
       .select('-password -createdAt -updatedAt -__v');
-    
+
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
 
-    // Get WAT submissions with subject information
+    // Aggregation example (assuming you have WatSubmission model)
     const submissions = await WatSubmission.aggregate([
       { $match: { studentId: mongoose.Types.ObjectId(req.params.studentId) } },
       {
@@ -240,7 +204,5 @@ router.get('/:studentId', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 module.exports = router;
-
-
-

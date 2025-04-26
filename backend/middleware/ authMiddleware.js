@@ -1,31 +1,43 @@
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/Admin');
 
-const authenticate = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'No token provided' });
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ 
+      success: false,
+      message: 'Access token missing' 
+    });
   }
 
-  const token = authHeader.split(' ')[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Assumes token contains id and role
+  jwt.verify(token, process.env.JWT_SECRET || 'your_fallback_secret', (err, user) => {
+    if (err) {
+      console.error("JWT verification error:", err);
+      return res.status(403).json({ 
+        success: false,
+        message: 'Invalid or expired token' 
+      });
+    }
+    
+    req.user = user;
     next();
-  } catch (err) {
-    console.error(err);
-    return res.status(403).json({ message: 'Invalid or expired token' });
-  }
+  });
 };
 
-const authorizeRole = (role) => {
+const authorizeRole = (...allowedRoles) => {
   return (req, res, next) => {
-    if (req.user.role !== role) {
-      return res.status(403).json({ message: 'Access denied' });
+    if (!req.user?.role || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ 
+        success: false,
+        message: 'Unauthorized access' 
+      });
     }
     next();
   };
 };
 
-module.exports = { authenticate, authorizeRole };
+module.exports = {
+  authenticateToken,
+  authorizeRole
+};
