@@ -73,6 +73,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
 // =======================
 // Admin Profile (View)
 // =======================
@@ -92,7 +93,6 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router; // Export the router
 
 
 
@@ -101,11 +101,13 @@ module.exports = router; // Export the router
 // =======================
 // Admin Profile (Update)
 // =======================
-router.put("/update", authorizeRole("admin"), async (req, res) => {
+router.put("/update", authenticateToken,authorizeRole('admin'),async (req, res) => {
+ 
   try {
+    console.log(req.body);
     const { name, email, contactNumber } = req.body;
-    const adminId = req.user.id; // Make sure your auth middleware sets this
-
+    const adminId = req.user.id;
+    
     // Basic validation
     if (!name || !email || !contactNumber) {
       return res.status(400).json({ 
@@ -122,7 +124,7 @@ router.put("/update", authorizeRole("admin"), async (req, res) => {
       });
     }
 
-    // Contact number validation (basic)
+    // Contact number validation
     if (!/^\d{10,15}$/.test(contactNumber)) {
       return res.status(400).json({
         success: false,
@@ -130,7 +132,7 @@ router.put("/update", authorizeRole("admin"), async (req, res) => {
       });
     }
 
-    // Check if email already exists for another admin
+    // Check if email exists for another admin
     const existingAdmin = await Admin.findOne({ email, _id: { $ne: adminId } });
     if (existingAdmin) {
       return res.status(400).json({
@@ -143,7 +145,7 @@ router.put("/update", authorizeRole("admin"), async (req, res) => {
       adminId,
       { name, email, contactNumber },
       { new: true, runValidators: true }
-    );
+    ).select('-password'); // Exclude password from response
 
     if (!updatedAdmin) {
       return res.status(404).json({ 
@@ -152,121 +154,26 @@ router.put("/update", authorizeRole("admin"), async (req, res) => {
       });
     }
 
+    // Return success response with updated data
     return res.status(200).json({
       success: true,
       message: "Profile updated successfully",
-      data: {
-        name: updatedAdmin.name,
-        email: updatedAdmin.email,
-        contactNumber: updatedAdmin.contactNumber
-      }
+      admin: updatedAdmin
     });
 
   } catch (error) {
-    console.error("Update Error:", error);
-    return res.status(500).json({ 
+    console.error("Profile update error:", error);
+    return res.status(500).json({
       success: false,
-      message: error.message || "Internal server error" 
+      message: "Internal server error",
+      error: error.message
     });
   }
 });
-// router.put("/update", authorizeRole("admin"), async (req, res) => {
-//   try {
-//     const { name, email, contactNumber } = req.body; // Changed from req.adminData to req.body
-//     const adminId = req.user.id;
 
-//     // Basic validation
-//     if (!name || !email || !contactNumber) {
-//       return res.status(400).json({ 
-//         success: false,
-//         message: "All fields are required" 
-//       });
-//     }
 
-//     // Email validation
-//     if (!/^\S+@\S+\.\S+$/.test(email)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid email format"
-//       });
-//     }
-
-//     const admin = await Admin.findById(adminId);
-//     if (!admin) {
-//       return res.status(404).json({ 
-//         success: false,
-//         message: "Admin not found" 
-//       });
-//     }
-
-//     // Update fields
-//     admin.name = name;
-//     admin.email = email;
-//     admin.contactNumber = contactNumber;
-
-//     const updatedAdmin = await admin.save();
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Profile updated successfully",
-//       data: { // Changed from 'admin' to 'data' for consistency
-//         name: updatedAdmin.name,
-//         email: updatedAdmin.email,
-//         contactNumber: updatedAdmin.contactNumber
-//       }
-//     });
-
-//   } catch (error) {
-//     console.error("Update Error:", error);
-//     return res.status(500).json({ 
-//       success: false,
-//       message: error.message || "Internal server error" 
-//     });
-//   }
-// });
-// =======================
-// Assign Subjects to Semester
-// =======================
-router.post("/assign-subjects", authorizeRole("admin"), async (req, res) => {
-  const { semester, subjects } = req.body;
-
-  if (!semester || !Array.isArray(subjects)) {
-    return res.status(400).json({ message: "Semester and subjects are required" });
-  }
-
-  try {
-    const admin = await Admin.findById(req.user.adminId);
-    if (!admin) return res.status(404).json({ message: "Admin not found" });
-
-    admin.assignedSubjects.set(semester, subjects);
-    await admin.save();
-
-    res.json({ success: true, message: `Subjects assigned for semester ${semester}` });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// =======================
-// Get All Assigned Subjects
-// =======================
-router.get("/assigned-subjects", authorizeRole("admin"), async (req, res) => {
-  try {
-    const admin = await Admin.findById(req.user.adminId);
-    if (!admin) return res.status(404).json({ message: "Admin not found" });
-
-    res.json({ assignedSubjects: admin.assignedSubjects });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 module.exports = router;
-
-
-
-
-
 
 
 
