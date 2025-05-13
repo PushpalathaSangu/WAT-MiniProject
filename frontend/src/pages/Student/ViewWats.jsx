@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import { useNavigate } from 'react-router-dom';
@@ -204,11 +205,17 @@
 // }
 
 
+=======
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import StudentSidebar from '../Student/StudentSidebar';
+<<<<<<< HEAD
 import { FaBars, FaClock, FaCalendarAlt, FaBook, FaHourglassStart, FaHourglassEnd, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+=======
+import { FaBars, FaClock, FaCalendarAlt, FaBook, FaHourglassStart, FaHourglassEnd } from 'react-icons/fa';
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 
 export default function ViewWats() {
   const [wats, setWats] = useState([]);
@@ -216,7 +223,10 @@ export default function ViewWats() {
   const [studentYear, setStudentYear] = useState('');
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+<<<<<<< HEAD
   const [expandedWat, setExpandedWat] = useState(null);
+=======
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -237,12 +247,20 @@ export default function ViewWats() {
       setLoading(true);
       try {
         const response = await axios.get(
+<<<<<<< HEAD
           `http://localhost:4000/api/wats/by-year/${studentYear}`
+=======
+          `http://localhost:5000/api/wats/by-year/${studentYear}`
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
         );
         
         if (!response.data || response.data.length === 0) {
           setError('No WATs found for your year');
         } else {
+<<<<<<< HEAD
+=======
+          // Sort WATs by start time (newest first)
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
           const sortedWats = response.data.sort((a, b) => 
             new Date(b.startTime) - new Date(a.startTime)
           );
@@ -261,6 +279,7 @@ export default function ViewWats() {
 
   const currentTime = new Date();
 
+<<<<<<< HEAD
   const categorizeWats = () => {
     const active = [];
     const upcoming = [];
@@ -284,6 +303,17 @@ export default function ViewWats() {
 
   const { active, upcoming, completed } = categorizeWats();
 
+=======
+  const getWatStatus = (start, end) => {
+    const startTime = new Date(start);
+    const endTime = new Date(end);
+    
+    if (currentTime < startTime) return 'upcoming';
+    if (currentTime > endTime) return 'completed';
+    return 'active';
+  };
+
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
   const formatDateTime = (dateString) => {
     const options = { 
       year: 'numeric', 
@@ -295,6 +325,7 @@ export default function ViewWats() {
     return new Date(dateString).toLocaleString('en-US', options);
   };
 
+<<<<<<< HEAD
   const toggleExpandWat = (watId) => {
     setExpandedWat(expandedWat === watId ? null : watId);
   };
@@ -400,6 +431,8 @@ export default function ViewWats() {
     );
   };
 
+=======
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
   return (
     <div className="flex min-h-screen bg-gray-50">
       <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -449,11 +482,86 @@ export default function ViewWats() {
               </p>
             </div>
           ) : (
+<<<<<<< HEAD
             <>
               {renderWatSection("Active WATs", active, 'active')}
               {renderWatSection("Upcoming WATs", upcoming, 'upcoming')}
               {renderWatSection("Completed WATs", completed, 'completed')}
             </>
+=======
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {wats.map((wat) => {
+                const status = getWatStatus(wat.startTime, wat.endTime);
+                const statusColors = {
+                  active: 'bg-green-100 text-green-800',
+                  upcoming: 'bg-blue-100 text-blue-800',
+                  completed: 'bg-gray-100 text-gray-800'
+                };
+
+                return (
+                  <div key={wat._id} className={`rounded-lg shadow-md overflow-hidden border-l-4 ${
+                    status === 'active' ? 'border-green-500' :
+                    status === 'upcoming' ? 'border-blue-500' : 'border-gray-400'
+                  }`}>
+                    <div className="bg-white p-6">
+                      <div className="flex justify-between items-start mb-3">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {wat.subject}
+                        </h3>
+                        <span className={`text-xs px-2 py-1 rounded-full ${statusColors[status]}`}>
+                          {status.charAt(0).toUpperCase() + status.slice(1)}
+                        </span>
+                      </div>
+                      
+                      <p className="text-gray-600 mb-1">
+                        WAT {wat.watNumber}
+                      </p>
+                      
+                      <div className="mt-4 space-y-2">
+                        <div className="flex items-center text-sm text-gray-600">
+                          <FaHourglassStart className="mr-2 text-blue-500" />
+                          <span>Starts: {formatDateTime(wat.startTime)}</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-600">
+                          <FaHourglassEnd className="mr-2 text-blue-500" />
+                          <span>Ends: {formatDateTime(wat.endTime)}</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-600">
+                          <FaClock className="mr-2 text-blue-500" />
+                          <span>Duration: {wat.duration || 'N/A'} minutes</span>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-6">
+                        {status === 'active' ? (
+                          <button
+                            onClick={() => navigate(`/wats/${wat._id}`)}
+                            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors"
+                          >
+                            Attempt Now
+                          </button>
+                        ) : status === 'upcoming' ? (
+                          <button
+                           
+                            className="w-full bg-blue-100 text-blue-800 py-2 px-4 rounded-md cursor-not-allowed"
+                          >
+                            Starts Soon
+                          </button>
+                        ) : (
+                          <button
+                       
+                            className="w-full bg-gray-200 text-gray-600 py-2 px-4 rounded-md cursor-not-allowed"
+                          >
+                            Completed
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
           )}
         </div>
       </main>

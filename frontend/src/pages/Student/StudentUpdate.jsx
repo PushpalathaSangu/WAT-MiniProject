@@ -43,7 +43,11 @@ export default function StudentUpdate() {
       return;
     }
 
+<<<<<<< HEAD
     axios.get('http://localhost:4000/student/profile', {
+=======
+    axios.get('http://localhost:5000/student/profile', {
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -74,7 +78,11 @@ export default function StudentUpdate() {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
+<<<<<<< HEAD
     axios.put('http://localhost:4000/student/update', student, {
+=======
+    axios.put('http://localhost:5000/student/update', student, {
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
       headers: {
         Authorization: `Bearer ${token}`,
       },

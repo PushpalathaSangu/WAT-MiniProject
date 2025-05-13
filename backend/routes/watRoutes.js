@@ -1,11 +1,11 @@
-
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const WAT = require('../models/Wat'); // Adjust path if needed
+const WAT = require('../models/Wat');
 const WatSubmission = require('../models/WatSubmission');
 const authenticateToken =require('../middleware/authenticateToken')
 
+<<<<<<< HEAD
 
 // Update WAT creation endpoint
 router.post('/create', authenticateToken, async (req, res) => {
@@ -18,8 +18,20 @@ router.post('/create', authenticateToken, async (req, res) => {
         success: false,
         message: 'All fields are required'
       });
-    }
+=======
+// create a new WAT
+router.post('/create', async (req, res) => {
+  try {
+    const { facultyId, year, semester, startTime, endTime, watNumber, questions, subject } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(facultyId)) {
+      return res.status(400).json({ error: 'Invalid facultyId' });
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
+    }
+    const start = new Date(startTime), end = new Date(endTime);
+    if (start >= end) return res.status(400).json({ error: 'End time must be after start time' });
+
+<<<<<<< HEAD
     // Convert and validate times
     const start = new Date(startTime);
     const end = new Date(endTime);
@@ -61,9 +73,24 @@ router.post('/create', authenticateToken, async (req, res) => {
         { startTime: { $lt: end, $gte: start } },
         { endTime: { $gt: start, $lte: end } },
         { startTime: { $lte: start }, endTime: { $gte: end } }
+=======
+    // duplicate WAT-number check
+    const dup = await WAT.findOne({ subject, year, semester, watNumber });
+    if (dup) return res.status(409).json({ error: 'Duplicate WAT', existingWat: dup });
+
+    // overlapping time check (same year)
+    const overlap = await WAT.findOne({
+      year,
+      $or: [
+        { startTime: { $lte: start }, endTime: { $gte: start } },
+        { startTime: { $lte: end },   endTime: { $gte: end   } },
+        { startTime: { $gte: start }, endTime: { $lte: end   } }
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
       ]
     });
+    if (overlap) return res.status(409).json({ error: 'Overlap', existingWat: overlap });
 
+<<<<<<< HEAD
     if (timeConflict) {
       return res.status(409).json({
         success: false,
@@ -110,61 +137,79 @@ router.post('/create', authenticateToken, async (req, res) => {
   }
 });
 router.get('/by-year/:year', async (req, res) => {
-  try {
-    const { year } = req.params;
-    console.log(`Fetching WATs for year: ${year}`);
-    
-    // Temporary: Return all WATs to verify connection is working
-    const allWats = await WAT.find({});
-    console.log('All WATs in DB:', allWats);
-    
-    // Then filter by year
-    const wats = await WAT.find({ year: year });
-    console.log('Filtered WATs:', wats);
-    
-    res.json(wats);
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: error.message });
+=======
+    const wat = new WAT({ facultyId, year, semester, subject, watNumber, questions, startTime: start, endTime: end });
+    await wat.save();
+    res.status(201).json({ message: 'WAT created', wat });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
+// get all WATs
+router.get('/', async (req, res) => {
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
+  try {
+    const wats = await WAT.find({});
+    res.json(wats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
-// GET /api/wats/active/by-year/:year
+<<<<<<< HEAD
+=======
+// get active WATs (now between start/end)
+router.get('/active', async (req, res) => {
+  try {
+    const now = new Date();
+    const wats = await WAT.find({ startTime: { $lte: now }, endTime: { $gte: now } });
+    res.json(wats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
+
+// get active by year
 router.get('/active/by-year/:year', async (req, res) => {
   try {
-    const { year } = req.params;
     const now = new Date();
-
     const wats = await WAT.find({
-      year,
+      year: req.params.year,
       startTime: { $lte: now },
       endTime: { $gte: now }
     });
     res.json(wats);
-  } catch (error) {
-    console.error('Error fetching active WATs:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
+<<<<<<< HEAD
 
 
 // GET /api/wats/display/:id Get full WAT details including questions
 router.get('/display/:id', async (req, res) => {
+=======
+// get WAT by id (including questions)
+router.get('/:id', async (req, res) => {
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
   try {
     const wat = await WAT.findById(req.params.id);
-   
-    if (!wat) {
-      return res.status(404).json({ error: 'WAT not found' });
-    }
-    res.json(wat);  // Will return the full WAT with questions
-  } catch (error) {
-    console.error('Error fetching WAT by ID:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    if (!wat) return res.status(404).json({ error: 'Not found' });
+    res.json(wat);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
+<<<<<<< HEAD
 
 
 router.post('/submit', authenticateToken, async (req, res) => {
@@ -185,6 +230,17 @@ router.post('/submit', authenticateToken, async (req, res) => {
     if (!Array.isArray(answers) || answers.length === 0) {
       return res.status(400).json({ error: 'Answers must be a non-empty array' });
     }
+=======
+// submit answers
+router.post('/submit', async (req, res) => {
+  const { watId, studentId, answers } = req.body;
+  if (!watId || !studentId || !Array.isArray(answers)) {
+    return res.status(400).json({ error: 'Invalid submission' });
+  }
+  try {
+    const already = await WatSubmission.findOne({ watId, studentId });
+    if (already) return res.status(400).json({ error: 'Already submitted' });
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 
     // Find the WAT
     const wat = await WAT.findById(watId);
@@ -194,6 +250,7 @@ router.post('/submit', authenticateToken, async (req, res) => {
 
     // Calculate score and validate answers
     let score = 0;
+<<<<<<< HEAD
     const processedAnswers = [];
     const questionMap = new Map(wat.questions.map(q => [q._id.toString(), q]));
 
@@ -418,6 +475,19 @@ router.put('/:id', authenticateToken, async (req, res) => {
       message: 'Server Error',
       error: err.message
     });
+=======
+    answers.forEach(a => {
+      const q = wat.questions.id(a.questionId);
+      if (q && q.correctAnswer === a.selectedOption) score++;
+    });
+
+    const sub = new WatSubmission({ watId, studentId, answers, score, submittedAt: new Date() });
+    await sub.save();
+    res.json({ message: 'Submitted', score });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
   }
 });
 

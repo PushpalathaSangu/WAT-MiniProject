@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -260,3 +261,15 @@ export default function ViewMarks() {
     </div>
   );
 }
+=======
+import React from 'react'
+
+export default function ViewMarks() {
+  return (
+    <div>
+      view marks
+      
+    </div>
+  )
+}
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8

@@ -1,19 +1,20 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+<<<<<<< HEAD
 const mongoose=require("mongoose")
 const Student = require("../models/Student");
 const WatSubmission=require('../models/WatSubmission');
+=======
+const mongoose = require('mongoose');
+const Student = require("../models/Student");
+const Faculty = require('../models/Faculty');
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 const { authorizeRole } = require("../middleware/authorizeRole");
 
 const authenticateToken = require("../middleware/authenticateToken");
 
 const router = express.Router();
-
-// ✅ Login-protected route
-router.get("/login", authorizeRole("student"), (req, res) => {
-  res.json({ message: `Welcome, Student ${req.user.id}` });
-});
 
 // ✅ Student Registration Route
 // router.post("/register", async (req, res) => {
@@ -57,17 +58,7 @@ router.get("/login", authorizeRole("student"), (req, res) => {
 //   }
 // });
 router.post("/register", async (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    year,
-    semester,
-    section,
-    studentId,
-    rollNumber,
-    phone,
-  } = req.body;
+  const { name, email, password, year, semester, section, studentId, rollNumber, phone } = req.body;
 
   try {
     // Enhanced validation
@@ -210,6 +201,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// ✅ Protected Welcome Route after login (token-based)
+router.get("/welcome", verifyToken, authorizeRole("student"), (req, res) => {
+  res.json({ message: `Welcome, Student ${req.user.studentId}` });
+});
 
 
 router.get('/profile', authenticateToken, async (req, res) => {
@@ -301,6 +296,7 @@ router.put("/update", authenticateToken, authorizeRole('student'), async (req, r
   }
 });
 
+<<<<<<< HEAD
 
 // Get students by year and section
 router.get('/api/students', async (req, res) => {
@@ -325,10 +321,22 @@ router.get('/api/students', async (req, res) => {
     console.error('Error fetching students:', error);
     res.status(500).json({ error: 'Server error while fetching students' });
   }
+=======
+// ✅ Logout Route (optional – frontend should just remove token)
+router.post("/logout", (req, res) => {
+  res.json({ message: "Logout successful" });
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 });
 
+// ✅ Get Student by ID
+router.get('/student/:id', async (req, res) => {
+  const studentId = req.params.id;
 
+  if (!mongoose.Types.ObjectId.isValid(studentId)) {
+    return res.status(400).json({ message: 'Invalid student ID' });
+  }
 
+<<<<<<< HEAD
 // GET /students?year=E1&section=A
 router.get('/', async (req, res) => {  // Note: just '/' because prefix is already "/students"
   try {
@@ -378,6 +386,35 @@ router.get('/students/count', async (req, res) => {
 
 // Get student details with WAT marks by year
 router.get('/:studentId', async (req, res) => {
+=======
+  try {
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(200).json(student);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error fetching student' });
+  }
+});
+
+// ✅ Get Students by Year
+router.get('/year/:year', async (req, res) => {
+  const { year } = req.params;
+
+  try {
+    const students = await Student.find({ year });
+    res.json({ students });
+  } catch (error) {
+    console.error('Error fetching students:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// ✅ Get student details with WAT marks
+router.get('/:studentId/wat-marks', async (req, res) => {
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
   try {
     // Validate studentId
     if (!mongoose.Types.ObjectId.isValid(req.params.studentId)) {
@@ -392,8 +429,13 @@ router.get('/:studentId', async (req, res) => {
       return res.status(404).json({ message: 'Student not found' });
     }
 
+<<<<<<< HEAD
     // Get WAT submissions grouped by year
     const submissionsByYear = await WatSubmission.aggregate([
+=======
+    // Aggregation example (assuming you have WatSubmission model)
+    const submissions = await WatSubmission.aggregate([
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
       { $match: { studentId: mongoose.Types.ObjectId(req.params.studentId) } },
       {
         $lookup: {
@@ -449,6 +491,7 @@ router.get('/:studentId', async (req, res) => {
     });
   }
 });
+<<<<<<< HEAD
 
 
 
@@ -467,3 +510,7 @@ router.get('/:studentId', async (req, res) => {
 module.exports = router;
 
 
+=======
+
+module.exports = router;
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8

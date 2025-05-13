@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import AdminSidebar from './AdminSidebar';
@@ -325,6 +326,8 @@ const UpdateSub = () => {
 export default UpdateSub;
 
 
+=======
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 // import React, { useState, useEffect, useCallback } from 'react';
 // import axios from 'axios';
 // import AdminSidebar from './AdminSidebar';
@@ -335,10 +338,15 @@ export default UpdateSub;
 //   const [selectedYear, setSelectedYear] = useState('E1');
 //   const [selectedSemester, setSelectedSemester] = useState('sem1');
 //   const [subjects, setSubjects] = useState([]);
+<<<<<<< HEAD
+=======
+//   const [originalSubjects, setOriginalSubjects] = useState([]);
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //   const [loading, setLoading] = useState(false);
 //   const [error, setError] = useState('');
 //   const [success, setSuccess] = useState('');
 
+<<<<<<< HEAD
 //   // Improved token handling function
 //   const getAuthToken = () => {
 //     const token = localStorage.getItem('admin');
@@ -348,23 +356,35 @@ export default UpdateSub;
 //     return token;
 //   };
 
+=======
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //   const fetchSubjects = useCallback(async () => {
 //     setLoading(true);
 //     setError('');
 //     try {
+<<<<<<< HEAD
 //       const token = getAuthToken();
+=======
+//       const token = localStorage.getItem('admin');
+//       console.log("token:",token);
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //       const response = await axios.get(
 //         `http://localhost:5000/api/subjects/${selectedYear}/${selectedSemester}`,
 //         {
 //           headers: {
+<<<<<<< HEAD
 //             'Authorization': `Bearer ${token}`,
 //             'Content-Type': 'application/json'
+=======
+//             Authorization: `Bearer ${token}`
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //           }
 //         }
 //       );
       
 //       const fetchedSubjects = response.data.subjects || [];
 //       setSubjects(fetchedSubjects);
+<<<<<<< HEAD
 //     } catch (err) {
 //       if (err.response?.status === 401) {
 //         // Token is invalid or expired
@@ -373,6 +393,11 @@ export default UpdateSub;
 //       } else {
 //         setError(err.response?.data?.message || 'Failed to fetch subjects');
 //       }
+=======
+//       setOriginalSubjects(fetchedSubjects);
+//     } catch (err) {
+//       setError(err.response?.data?.message || 'Failed to fetch subjects');
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //     } finally {
 //       setLoading(false);
 //     }
@@ -431,7 +456,11 @@ export default UpdateSub;
 //     setSuccess('');
 
 //     try {
+<<<<<<< HEAD
 //       const token = getAuthToken();
+=======
+//       const token = localStorage.getItem('admin');
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
       
 //       // Prepare the payload
 //       const payload = {
@@ -452,8 +481,12 @@ export default UpdateSub;
 //         payload,
 //         {
 //           headers: {
+<<<<<<< HEAD
 //             'Authorization': `Bearer ${token}`,
 //             'Content-Type': 'application/json'
+=======
+//             Authorization: `Bearer ${token}`
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //           }
 //         }
 //       );
@@ -461,6 +494,7 @@ export default UpdateSub;
 //       setSuccess(response.data.message || 'Subjects updated successfully!');
 //       fetchSubjects(); // Refresh the data
 //     } catch (err) {
+<<<<<<< HEAD
 //       if (err.response?.status === 401) {
 //         // Token is invalid or expired
 //         localStorage.removeItem('admin');
@@ -468,6 +502,9 @@ export default UpdateSub;
 //       } else {
 //         setError(err.response?.data?.message || 'Failed to update subjects');
 //       }
+=======
+//       setError(err.response?.data?.message || 'Failed to update subjects');
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //     } finally {
 //       setLoading(false);
 //     }
@@ -583,6 +620,10 @@ export default UpdateSub;
 //                           e.target.value
 //                         )}
 //                         className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+<<<<<<< HEAD
+=======
+                        
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 //                       />
 //                     </div>
                     
@@ -672,4 +713,18 @@ export default UpdateSub;
 //   );
 // };
 
+<<<<<<< HEAD
 // export default UpdateSub;
+=======
+// export default UpdateSub;
+
+import React from 'react'
+
+export default function UpdateSub() {
+  return (
+    <div>
+      updatedSubjects
+    </div>
+  )
+}
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8

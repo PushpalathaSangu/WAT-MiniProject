@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaBars, FaUserGraduate, FaClipboardList, FaPlusCircle } from 'react-icons/fa';
@@ -8,6 +11,7 @@ export default function Faculty() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [facultyName, setFacultyName] = useState('');
+<<<<<<< HEAD
 
   useEffect(() => {
     const storedName = localStorage.getItem('facultyName');
@@ -23,11 +27,28 @@ export default function Faculty() {
       description: 'create a new wat by usig syllubus.',
       icon: <FaPlusCircle className="text-3xl text-purple-600 mb-2" />,
       onClick: () => navigate('/faculty/mcqs'),
+=======
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('facultyName');
+    if (storedName) {
+      setFacultyName(storedName);
+    }
+  }, []);
+
+  const cards = [
+    {
+      title: 'Student Details',
+      description: 'View year-wise student data and assigned subjects.',
+      icon: <FaUserGraduate className="text-3xl text-blue-600 mb-2" />,
+      onClick: () => navigate('/faculty/students'),
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
     },
     {
       title: 'View WATs',
       description: 'View all active WATs.',
       icon: <FaClipboardList className="text-3xl text-green-600 mb-2" />,
+<<<<<<< HEAD
       onClick: () => navigate('/faculty/view-wats'), // Updated path
     },
     {
@@ -35,6 +56,15 @@ export default function Faculty() {
       description: 'View year-wise student data .',
       icon: <FaUserGraduate className="text-3xl text-blue-600 mb-2" />,
       onClick: () => navigate('/faculty/students-details'), // Updated path
+=======
+      onClick: () => navigate('/faculty/view-wats'),
+    },
+    {
+      title: 'Create WAT',
+      description: 'Start a new Weekly Assessment Test for your class.',
+      icon: <FaPlusCircle className="text-3xl text-purple-600 mb-2" />,
+      onClick: () => navigate('/create-wat'),
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
     },
   ];
 

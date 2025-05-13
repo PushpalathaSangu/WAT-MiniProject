@@ -15,7 +15,11 @@ export default function StudentYearDetails() {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
+<<<<<<< HEAD
         const response = await fetch(`http://localhost:4000/students/year/${year}`);
+=======
+        const response = await fetch(`http://localhost:5000/students/year/${year}`);
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
         
         if (!response.ok) {
           throw new Error('Failed to fetch students');
@@ -158,4 +162,8 @@ export default function StudentYearDetails() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8

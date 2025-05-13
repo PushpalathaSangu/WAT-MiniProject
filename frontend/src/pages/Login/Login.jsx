@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash, FaUserGraduate, FaUserTie, FaUserShield } from 'react-icons/fa';
 import axios from 'axios';
 import loginImage from '../../assets/image1.jpg';
-import './Login.css';
+
 
 function Login() {
   const navigate = useNavigate();
@@ -80,14 +80,15 @@ function Login() {
       const { token, user } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("name",user.name);
-      localStorage.setItem("role",user.role);
-      localStorage.setItem("_id",user.id);
-     
-    // ADD THIS: Store year separately if it exists in user object
-    if (user.year) {
-      localStorage.setItem("year", user.year);
-    }
+      localStorage.setItem("name", user.name);
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("_id", user.id); // Store facultyId as _id
+
+      // ADD THIS: Store year separately if it exists in user object
+      if (user.year) {
+        localStorage.setItem("year", user.year);
+      }
+
       // Show success message
       alert(`Welcome back, ${user.name}!`);
 
@@ -109,7 +110,7 @@ function Login() {
   };
 
   const getUserTypeIcon = () => {
-    switch(formData.userType) {
+    switch (formData.userType) {
       case 'Student': return <FaUserGraduate className="text-blue-500" />;
       case 'Faculty': return <FaUserTie className="text-green-500" />;
       case 'Admin': return <FaUserShield className="text-purple-500" />;
@@ -124,9 +125,8 @@ function Login() {
         <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 p-8 text-white flex flex-col items-center justify-center">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-            
           </div>
-          
+
           <img 
             src={loginImage} 
             alt="Learning illustration" 
@@ -223,7 +223,7 @@ function Login() {
               disabled={isLoading}
               className={`w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
             >
-              {isLoading ? 'Loging in...' : 'Login'}
+              {isLoading ? 'Logging in...' : 'Login'}
             </button>
 
             <div className="text-center text-sm text-gray-600 mt-4">

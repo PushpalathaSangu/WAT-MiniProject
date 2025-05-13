@@ -34,7 +34,11 @@ export default function StudentProfile() {
     }
 
     axios
+<<<<<<< HEAD
       .get('http://localhost:4000/student/profile', {
+=======
+      .get('http://localhost:5000/student/profile', {
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
         headers: {
           Authorization: `Bearer ${token}`,
         },

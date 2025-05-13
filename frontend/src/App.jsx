@@ -17,6 +17,7 @@ import Admin from './pages/Admin/Admin.jsx';
 import AdminProfile from './pages/Admin/AdminProfile.jsx';
 import UpdateProfile from './pages/Admin/UpdateProfile.jsx';
 import Subjects from './pages/Admin/Subjects.jsx';
+<<<<<<< HEAD
 //import StudentDetails from './pages/Admin/StudentDetails.jsx';
 import FacultyDetails from './pages/Admin/FacultyDetails.jsx';
 import ViewSubjects from './pages/Admin/ViewSubjects.jsx';
@@ -50,6 +51,16 @@ import FacultyWATsByYear from "./pages/Faculty/FacultyWatsByYear.jsx";
 import SectionDetails from "./pages/Faculty/SectionDetails.jsx";
 import StudentsList from "./pages/Faculty/StudentsList.jsx";
 import GenerateMCQs  from './pages/Faculty/GenerateMcqs.jsx';
+=======
+import StudentDetails from './pages/Admin/StudentDetails.jsx';
+import FacultyDetails from './pages/Admin/FacultyDetails.jsx';
+import FacultyProfile from './pages/Faculty/FacultyProfile.jsx';
+import FacultyUpdateProfile from './pages/Faculty/FacultyUpdateProfile.jsx';
+import ViewWat from './pages/Faculty/ViewWat.jsx';
+import StudentsDetails from './pages/Faculty/StudentsDetails.jsx';
+import StudentYearDetails from './pages/Faculty/StudentYearDetails.jsx'; 
+
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 
 const App = () => {
   const location = useLocation();
@@ -70,6 +81,7 @@ const App = () => {
 
           {/* Student Routes */}
           <Route path="/student-dashboard" element={<Student />} />
+<<<<<<< HEAD
           <Route path="/student/profile" element={<StudentProfile/>}/>
           <Route path="/student/update-profile" element={<StudentProfileUpdate />}/>
           <Route path="/student/wats" element={<ViewWats/>}/>
@@ -93,6 +105,22 @@ const App = () => {
           <Route path="/faculty/student-details/:year/:section" element={<StudentsList />} />
           <Route path="/faculty/students/year/:year" element={<StudentYearDetails />} />
           <Route path="/faculty/mcqs" element={<GenerateMCQs/>} />
+=======
+          
+          
+          <Route path="create-wat" element={<CreateWATPage />} />
+          
+          
+          <Route path="/faculty-dashboard" element={<Faculty />} />
+          <Route path="/faculty/students" element={<StudentsDetails />} />
+          <Route path="/faculty/students/year/:year" element={<StudentYearDetails />} />
+          <Route path="/faculty/view-wats" element={<ViewWat />} />
+          <Route path="/faculty/profile" element={<FacultyProfile />} />
+          <Route path="/faculty/update-profile" element={<FacultyUpdateProfile />} />
+
+
+          <Route path="/admin-dashboard" element={<Admin />} />
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 
 
           {/* Admin Routes */}
@@ -104,10 +132,14 @@ const App = () => {
           <Route path="/admin/students/:year" element={<YearStudents />} />
           <Route path="/admin/students/:year/:section" element={<SectionStudents />} />
           <Route path="/admin/faculty" element={<FacultyDetails />} />
+<<<<<<< HEAD
           <Route path="/admin/view-subjects" element={<ViewSubjects />} />
           <Route path="/admin/update-subjects" element={<UpdateSub />} />
 
      
+=======
+          <Route path="/wats/:id" element={<WATAttemptPage />} />
+>>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
         </Routes>
       </main>
       {!isAuthPage && <Footer />}
