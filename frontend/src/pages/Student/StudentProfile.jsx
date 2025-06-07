@@ -34,11 +34,7 @@ export default function StudentProfile() {
     }
 
     axios
-<<<<<<< HEAD
       .get('http://localhost:4000/student/profile', {
-=======
-      .get('http://localhost:5000/student/profile', {
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -82,12 +78,22 @@ export default function StudentProfile() {
   }
 
   return (
+<<<<<<< HEAD
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Mobile Top Bar */}
       <div className="md:hidden p-4 bg-white shadow-md flex justify-between items-center">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="text-blue-600 text-2xl focus:outline-none"
+=======
+    <div className="h-screen flex flex-col bg-gray-100">
+      {/* Mobile Top Bar */}
+      <div className="md:hidden p-4 bg-white shadow flex justify-between items-center">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="text-blue-600 text-2xl"
+          aria-label="Toggle sidebar"
+>>>>>>> Final commit - project completed and ready for deployment
         >
           <FaBars />
         </button>
@@ -96,21 +102,56 @@ export default function StudentProfile() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
+<<<<<<< HEAD
         <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         {/* Profile Content */}
         <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8">
+=======
+        <div
+          className={`
+            fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-md transform
+            md:relative md:translate-x-0 transition-transform duration-300 ease-in-out
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          `}
+        >
+          <StudentSidebar
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
+        </div>
+
+        {/* Overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-blue-gray-800 bg-opacity-30 backdrop-blur-sm z-20 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          ></div>
+        )}
+
+        {/* Profile Content */}
+        <main className="flex-1 p-6 overflow-y-auto">
+>>>>>>> Final commit - project completed and ready for deployment
           <div className="max-w-4xl mx-auto">
             {/* Single Profile Card */}
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
               {/* Profile Header with Gradient */}
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-white">
                 <div className="flex flex-col md:flex-row items-center">
+<<<<<<< HEAD
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full  flex items-center justify-center mb-4 md:mb-0 md:mr-6">
                     <FaUserGraduate className='w-32 h-32' /> {/* Even larger */}
                   </div>
                 </div>
+=======
+                  <div className="relative">
+                    <div className="w-32 h-32 rounded-full flex items-center justify-center mb-4 md:mb-0 md:mr-6">
+                      <FaUserGraduate className='w-32 h-32' />
+                    </div>
+                  </div>
+>>>>>>> Final commit - project completed and ready for deployment
                   <div className="text-center md:text-left">
                     <div className="flex items-center justify-center md:justify-start">
                       <FaGraduationCap className="mr-2 text-xl" />

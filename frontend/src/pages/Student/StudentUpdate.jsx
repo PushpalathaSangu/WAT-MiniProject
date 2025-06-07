@@ -34,6 +34,10 @@ export default function StudentUpdate() {
   const [success, setSuccess] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+<<<<<<< HEAD
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -43,11 +47,7 @@ export default function StudentUpdate() {
       return;
     }
 
-<<<<<<< HEAD
     axios.get('http://localhost:4000/student/profile', {
-=======
-    axios.get('http://localhost:5000/student/profile', {
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,11 +78,7 @@ export default function StudentUpdate() {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
-<<<<<<< HEAD
     axios.put('http://localhost:4000/student/update', student, {
-=======
-    axios.put('http://localhost:5000/student/update', student, {
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -90,7 +86,10 @@ export default function StudentUpdate() {
     .then(() => {
       setSuccess('Profile updated successfully!');
       setShowSuccessModal(true);
+<<<<<<< HEAD
      
+=======
+>>>>>>> Final commit - project completed and ready for deployment
     })
     .catch((err) => {
       console.error('Error updating profile:', err);
@@ -108,6 +107,10 @@ export default function StudentUpdate() {
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="text-blue-600 text-2xl focus:outline-none"
+<<<<<<< HEAD
+=======
+          aria-label="Toggle sidebar"
+>>>>>>> Final commit - project completed and ready for deployment
         >
           <FaBars />
         </button>
@@ -116,7 +119,28 @@ export default function StudentUpdate() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
+<<<<<<< HEAD
         <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+=======
+        <div
+          className={`
+            fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-md transform
+            md:relative md:translate-x-0 transition-transform duration-300 ease-in-out
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          `}
+        >
+          <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        </div>
+
+        {/* Overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-blue-gray-800 bg-opacity-30 backdrop-blur-sm z-20 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+>>>>>>> Final commit - project completed and ready for deployment
 
         {/* Update Profile Content */}
         <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8">
@@ -134,10 +158,15 @@ export default function StudentUpdate() {
                 {/* Profile Header */}
                 <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-white">
                   <div className="flex flex-col md:flex-row items-center">
+<<<<<<< HEAD
                   
                     <div className="text-center md:text-left">
                       <h1 className="text-2xl font-bold text-center">Update Profile of {student.studentId}</h1>
                   
+=======
+                    <div className="text-center md:text-left">
+                      <h1 className="text-2xl font-bold text-center">Update Profile of {student.studentId}</h1>
+>>>>>>> Final commit - project completed and ready for deployment
                     </div>
                   </div>
                 </div>
@@ -156,7 +185,11 @@ export default function StudentUpdate() {
                     <h2 className="text-lg font-semibold text-gray-800 border-b pb-2">
                       Personal Information
                     </h2>
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaUserGraduate className="text-blue-500" />}
                       label="Full Name"
@@ -165,7 +198,11 @@ export default function StudentUpdate() {
                       onChange={handleChange}
                       required
                     />
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaEnvelope className="text-blue-500" />}
                       label="Email Address"
@@ -175,7 +212,11 @@ export default function StudentUpdate() {
                       onChange={handleChange}
                       required
                     />
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaPhone className="text-blue-500" />}
                       label="Contact Number"
@@ -191,7 +232,11 @@ export default function StudentUpdate() {
                     <h2 className="text-lg font-semibold text-gray-800 border-b pb-2">
                       Academic Information
                     </h2>
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaIdCard className="text-blue-500" />}
                       label="Student ID"
@@ -200,7 +245,11 @@ export default function StudentUpdate() {
                       onChange={handleChange}
                       disabled
                     />
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaHashtag className="text-blue-500" />}
                       label="Roll Number"
@@ -208,7 +257,11 @@ export default function StudentUpdate() {
                       value={student.rollNumber}
                       onChange={handleChange}
                     />
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaCalendarAlt className="text-blue-500" />}
                       label="Academic Year"
@@ -216,7 +269,11 @@ export default function StudentUpdate() {
                       value={student.year}
                       onChange={handleChange}
                     />
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaBook className="text-blue-500" />}
                       label="Semester"
@@ -224,7 +281,11 @@ export default function StudentUpdate() {
                       value={student.semester}
                       onChange={handleChange}
                     />
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
                     <FormField
                       icon={<FaUsers className="text-blue-500" />}
                       label="Section"
@@ -250,6 +311,7 @@ export default function StudentUpdate() {
           </div>
         </main>
       </div>
+<<<<<<< HEAD
       {showSuccessModal && (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm transition-opacity duration-300">
     <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md transform transition-all duration-300 scale-95 animate-scaleIn">
@@ -291,10 +353,46 @@ export default function StudentUpdate() {
     </div>
   </div>
 )}
+=======
+
+      {showSuccessModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm transition-opacity duration-300">
+          <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md transform transition-all duration-300 scale-95 animate-scaleIn">
+            <div className="text-center">
+              {/* Success Icon */}
+              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                <svg 
+                  className="h-10 w-10 text-green-600" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  viewBox="0 0 24 24" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Profile updated successfully!</h3>
+              <button
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  navigate('/student/profile');
+                }}
+                className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
+              >
+                Go to Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+>>>>>>> Final commit - project completed and ready for deployment
     </div>
   );
 }
 
+<<<<<<< HEAD
 // Reusable Form Field Component
 function FormField({ icon, label, type = 'text', name, value, onChange, required = false, disabled = false }) {
   return (
@@ -322,3 +420,27 @@ function FormField({ icon, label, type = 'text', name, value, onChange, required
     </div>
   );
 }
+=======
+// Reusable input form field component
+function FormField({ icon, label, type = 'text', name, value, onChange, required = false, disabled = false }) {
+  return (
+    <label className="block">
+      <span className="flex items-center text-gray-700 mb-1 font-semibold">
+        {icon}
+        <span className="ml-2">{label}</span>
+      </span>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+        disabled={disabled}
+        className={`w-full px-4 py-2 rounded-md border ${
+          disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+        } border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400`}
+      />
+    </label>
+  );
+}
+>>>>>>> Final commit - project completed and ready for deployment

@@ -56,7 +56,11 @@ export default function UpdateProfile() {
     setError('');
     setSuccess('');
     setLoading(true);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -64,6 +68,7 @@ export default function UpdateProfile() {
         setLoading(false);
         return;
       }
+<<<<<<< HEAD
   
       const res = await axios.put(
         'http://localhost:5000/admin/update', 
@@ -76,13 +81,31 @@ export default function UpdateProfile() {
         }
       );
   
+=======
+
+      const res = await axios.put(
+        'http://localhost:5000/admin/update',
+        adminData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+>>>>>>> Final commit - project completed and ready for deployment
       if (res.data.success) {
         setSuccess('Profile updated successfully!');
         setTimeout(() => navigate('/admin/profile'), 1500);
       }
     } catch (error) {
       console.error("Update error:", error);
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> Final commit - project completed and ready for deployment
       if (error.response) {
         if (error.response.status === 401) {
           setError('Session expired. Please login again.');
@@ -104,6 +127,7 @@ export default function UpdateProfile() {
   };
 
   if (loading && !adminData.name) {
+<<<<<<< HEAD
     return <div className="text-center mt-20">Loading...</div>;
   }
 
@@ -122,26 +146,81 @@ export default function UpdateProfile() {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
+=======
+    return <div className="text-center mt-20 text-lg text-gray-700">Loading...</div>;
+  }
+
+  return (
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Mobile Top Bar - Lower z-index */}
+      <div className="md:hidden p-4 bg-white shadow flex justify-between items-center sticky top-0 z-20">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="text-blue-600 text-2xl"
+          aria-label="Toggle sidebar"
+        >
+          <FaBars />
+        </button>
+        <h1 className="text-xl font-semibold text-blue-700">Update Profile</h1>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar - Higher z-index */}
+        <div
+          className={
+            `fixed inset-y-0 left-0 z-30 w-64 bg-blue-600 shadow-md transform
+            md:relative md:translate-x-0 transition-transform duration-300 ease-in-out
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
+          }
+        >
+          <Sidebar
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
+        </div>
+
+        {/* Overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-blue-gray-800 bg-opacity-30 backdrop-blur-sm z-25 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          ></div>
+        )}
+
+        {/* Main Content */}
+>>>>>>> Final commit - project completed and ready for deployment
         <main className="flex-1 p-6 overflow-y-auto flex justify-center items-start">
           <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md mt-6">
             <h2 className="text-2xl font-semibold text-blue-600 mb-4 text-center">
               Update Profile
             </h2>
+<<<<<<< HEAD
             
             {error && (
               <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+=======
+
+            {error && (
+              <div className="mb-4 p-2 bg-red-100 text-red-700 rounded" role="alert">
+>>>>>>> Final commit - project completed and ready for deployment
                 {error}
               </div>
             )}
 
             {success && (
+<<<<<<< HEAD
               <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+=======
+              <div className="mb-4 p-2 bg-green-100 text-green-700 rounded" role="alert">
+>>>>>>> Final commit - project completed and ready for deployment
                 {success}
               </div>
             )}
 
             <form onSubmit={handleUpdate} className="space-y-4">
               <div>
+<<<<<<< HEAD
                 <label className="block text-sm font-medium text-gray-700">Name</label>
                 <input
                   name="name"
@@ -171,17 +250,82 @@ export default function UpdateProfile() {
                   name="contactNumber"
                   type="tel"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
+=======
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={adminData.name}
+                  onChange={handleChange}
+                  required
+                  autoComplete="name"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={adminData.email}
+                  onChange={handleChange}
+                  required
+                  autoComplete="email"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="contactNumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Contact Number
+                </label>
+                <input
+                  id="contactNumber"
+                  name="contactNumber"
+                  type="tel"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+>>>>>>> Final commit - project completed and ready for deployment
                   value={adminData.contactNumber}
                   onChange={handleChange}
                   required
                   pattern="[0-9]{10,15}"
                   title="10-15 digit phone number"
+<<<<<<< HEAD
                 />
               </div>
               
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:bg-blue-300"
+=======
+                  autoComplete="tel"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className={`w-full py-2 rounded font-semibold transition ${
+                  loading
+                    ? 'bg-blue-300 cursor-not-allowed text-white'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}
+>>>>>>> Final commit - project completed and ready for deployment
                 disabled={loading}
               >
                 {loading ? 'Updating...' : 'Update Profile'}

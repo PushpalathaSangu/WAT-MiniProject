@@ -2,32 +2,17 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const Faculty = require("../models/Faculty");
-<<<<<<< HEAD
 const Student = require("../models/Student");
 const WAT = require("../models/Wat");
 const router = express.Router();
 const authenticateToken =require('../middleware/authenticateToken')
-=======
-const Student = require('../models/Student');
-const { authorizeRole } = require("../middleware/authorizeRole");
-const { authenticateToken } = require("../middleware/authenticateToken");
-
-const router = express.Router();
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 
 // Faculty registration
 router.post("/register", async (req, res) => {
-  const { name, email, password, years, subjects, contact } = req.body;
-
   try {
-    // Validate years
-    if (!years || !Array.isArray(years) || years.length === 0) {
-      return res.status(400).json({ message: "At least one year must be assigned" });
-    }
+    const { name, email, password, contact, years, subjects } = req.body;
 
-<<<<<<< HEAD
     // Validation
     if (!name || !email || !password || !contact || !years || !subjects) {
       return res.status(400).json({ 
@@ -43,16 +28,6 @@ router.post("/register", async (req, res) => {
         success: false,
         message: "Email already registered" 
       });
-=======
-    // Validate subjects structure
-    if (!subjects || typeof subjects !== 'object') {
-      return res.status(400).json({ message: "Subjects must be provided as a map" });
-    }
-
-    const existingFaculty = await Faculty.findOne({ email });
-    if (existingFaculty) {
-      return res.status(400).json({ message: "Email already registered" });
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
     }
 
     // Hash password
@@ -63,8 +38,8 @@ router.post("/register", async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      contact,
       years,
-<<<<<<< HEAD
       subjects: new Map(Object.entries(subjects))
     });
 
@@ -74,15 +49,6 @@ router.post("/register", async (req, res) => {
       success: true,
       message: "Faculty registered successfully" 
     });
-=======
-      subjects: new Map(Object.entries(subjects)),
-      contact,
-      role: 'faculty'
-    });
-
-    await faculty.save();
-    res.status(201).json({ message: "Faculty registration successful" });
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
   } catch (error) {
     console.error("Registration Error:", error);
     res.status(500).json({ 
@@ -180,7 +146,6 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-<<<<<<< HEAD
       { 
         facultyId: faculty._id.toString(),
         email: faculty.email,
@@ -191,11 +156,6 @@ router.post("/login", async (req, res) => {
         expiresIn: "1h",
         algorithm: "HS256"
       }
-=======
-      { id: faculty._id, email: faculty.email, role: "faculty" },
-      process.env.JWT_SECRET || "secretKey",
-      { expiresIn: "1h" }
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
     );
 
     res.status(200).json({
@@ -207,13 +167,8 @@ router.post("/login", async (req, res) => {
         email: faculty.email,
         contact: faculty.contact,
         years: faculty.years,
-<<<<<<< HEAD
         subjects: Object.fromEntries(faculty.subjects)
       }
-=======
-        subjects: Object.fromEntries(faculty.subjects),
-      },
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
     });
   } catch (error) {
     console.error("Login Error:", error);
@@ -241,6 +196,32 @@ router.post("/login", async (req, res) => {
 //   }
 // });
 
+
+// router.get('/profile', authenticateToken, async (req, res) => {
+//   try {
+//     const faculty = await Faculty.findById(req.user.id)
+//       .populate('assignedSubjects.subject', 'name year') // Adjust based on your schema
+//       .select('-password -createdAt -updatedAt -__v');
+
+//     if (!faculty) {
+//       return res.status(404).json({ message: 'Faculty not found' });
+//     }
+
+//     // Format the data if needed
+//     const formattedFaculty = {
+//       ...faculty.toObject(),
+//       assignedSubjects: faculty.assignedSubjects.map(sub => ({
+//         subject: sub.subject.name,
+//         year: sub.subject.year
+//       }))
+//     };
+
+//     res.json(formattedFaculty);
+//   } catch (err) {
+//     console.error('Error fetching faculty profile:', err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 
 // Get faculty profile (updated)
@@ -278,7 +259,6 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 
 // Update faculty profile - CORRECTED VERSION
 router.put('/update', authenticateToken, async (req, res) => {
@@ -521,50 +501,10 @@ module.exports = router;
 //     });
 //   }
 // });
-=======
-// Get faculty profile
-router.get("/profile", authenticateToken, async (req, res) => {
-  try {
-    if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
-      return res.status(400).json({ message: "Invalid faculty ID" });
-    }
 
-    const faculty = await Faculty.findById(req.user.id).select("-password");
-    if (!faculty) {
-      return res.status(404).json({ message: "Faculty not found" });
-    }
 
-    // Convert Map to object for response
-    const facultyObj = faculty.toObject();
-    facultyObj.subjects = Object.fromEntries(faculty.subjects);
 
-    res.status(200).json(facultyObj);
-  } catch (error) {
-    console.error("Error fetching faculty profile:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
-// Update faculty profile
-router.put("/update", authenticateToken, authorizeRole('faculty'), async (req, res) => {
-  try {
-    const { name, email, contact } = req.body;
-    const facultyId = req.user.id;
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
-
-    if (!mongoose.Types.ObjectId.isValid(facultyId)) {
-      return res.status(400).json({ message: "Invalid faculty ID" });
-    }
-
-    if (!name || !email || !contact) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
-    }
-
-<<<<<<< HEAD
 
 
 // Add this route to facultyRoutes.js
@@ -612,70 +552,6 @@ router.get('/wats/:year', async (req, res) => {
 
     if (!wats || wats.length === 0) {
       return res.status(404).json({ success: false, message: `No WATs found for year ${year}` });
-=======
-    if (!/^\d{10,15}$/.test(contact)) {
-      return res.status(400).json({ message: "Invalid contact number" });
-    }
-
-    const existingFaculty = await Faculty.findOne({ email, _id: { $ne: facultyId } });
-    if (existingFaculty) {
-      return res.status(400).json({ message: "Email already in use" });
-    }
-
-    const updatedFaculty = await Faculty.findByIdAndUpdate(
-      facultyId,
-      { name, email, contact },
-      { new: true, runValidators: true }
-    ).select('-password');
-
-    if (!updatedFaculty) {
-      return res.status(404).json({ message: "Faculty not found" });
-    }
-
-    res.status(200).json({
-      message: "Profile updated successfully",
-      faculty: updatedFaculty
-    });
-  } catch (error) {
-    console.error('Profile update error:', error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// Get faculty's assigned years
-router.get('/:facultyId/years', async (req, res) => {
-  try {
-    const facultyId = req.params.facultyId;
-    
-    if (!mongoose.Types.ObjectId.isValid(facultyId)) {
-      return res.status(400).json({ message: 'Invalid faculty ID' });
-    }
-
-    const faculty = await Faculty.findById(facultyId).select('years');
-    if (!faculty) {
-      return res.status(404).json({ message: 'Faculty not found' });
-    }
-    
-    res.json({ years: faculty.years });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Delete faculty account
-router.delete("/delete", authenticateToken, async (req, res) => {
-  try {
-    const facultyId = req.user.id;
-    
-    if (!mongoose.Types.ObjectId.isValid(facultyId)) {
-      return res.status(400).json({ message: "Invalid faculty ID" });
-    }
-
-    const faculty = await Faculty.findByIdAndDelete(facultyId);
-    if (!faculty) {
-      return res.status(404).json({ message: "Faculty not found" });
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
     }
 
     return res.status(200).json({ success: true, data: wats });
@@ -685,8 +561,5 @@ router.delete("/delete", authenticateToken, async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 
-=======
->>>>>>> f6835e94c53861a7cc75875b691904592825d8f8
 module.exports = router;
