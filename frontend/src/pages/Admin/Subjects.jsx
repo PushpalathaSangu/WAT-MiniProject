@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-import AdminSidebar from './AdminSidebar';
-
-
-=======
 import { FaBars } from 'react-icons/fa';
 import AdminSidebar from './AdminSidebar';
 
->>>>>>> Final commit - project completed and ready for deployment
 export default function Subjects() {
   const [year, setYear] = useState('E1');
   const [semester, setSemester] = useState('sem1');
   const [subjects, setSubjects] = useState([{ code: '', name: '' }]);
-<<<<<<< HEAD
-=======
   const [sidebarOpen, setSidebarOpen] = useState(false);
->>>>>>> Final commit - project completed and ready for deployment
 
   const handleChange = (index, field, value) => {
     const updatedSubjects = [...subjects];
@@ -45,20 +36,6 @@ export default function Subjects() {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex flex-col min-h-screen">
-   
-      {/* Main Content with Sidebar */}
-      <div className="flex flex-1 bg-gray-100">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-md">
-          <AdminSidebar />
-        </div>
-
-        {/* Page Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8">
-=======
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Mobile Header*/}
       <div className="md:hidden p-4 bg-white shadow flex justify-between items-center">
@@ -99,7 +76,6 @@ export default function Subjects() {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto z-10 p-6 md:p-8">
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 md:p-8">
->>>>>>> Final commit - project completed and ready for deployment
             <h2 className="text-3xl font-bold text-center text-blue-700 mb-8">Add Subjects</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -113,13 +89,9 @@ export default function Subjects() {
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     {['E1', 'E2', 'E3', 'E4'].map((y) => (
-<<<<<<< HEAD
-                      <option key={y} value={y}>{y}</option>
-=======
                       <option key={y} value={y}>
                         {y}
                       </option>
->>>>>>> Final commit - project completed and ready for deployment
                     ))}
                   </select>
                 </div>
@@ -156,11 +128,7 @@ export default function Subjects() {
                         type="text"
                         value={subject.name}
                         onChange={(e) => handleChange(idx, 'name', e.target.value)}
-<<<<<<< HEAD
-                        placeholder="enter subject"
-=======
                         placeholder="Enter subject name"
->>>>>>> Final commit - project completed and ready for deployment
                         required
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
@@ -174,11 +142,7 @@ export default function Subjects() {
                 <button
                   type="button"
                   onClick={addSubjectField}
-<<<<<<< HEAD
-                  className="text-blue-600 hover:underline font-medium"
-=======
                   className="text-blue-600 hover:underline font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
->>>>>>> Final commit - project completed and ready for deployment
                 >
                   + Add another subject
                 </button>
@@ -188,29 +152,15 @@ export default function Subjects() {
               <div className="text-center">
                 <button
                   type="submit"
-<<<<<<< HEAD
-                  className="bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
-=======
                   className="bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500"
->>>>>>> Final commit - project completed and ready for deployment
                 >
                   Save Subjects
                 </button>
               </div>
             </form>
           </div>
-<<<<<<< HEAD
-        </div>
-      </div>
-
-    
-    </div>
-  );
-}
-=======
         </main>
       </div>
     </div>
   );
 }
->>>>>>> Final commit - project completed and ready for deployment

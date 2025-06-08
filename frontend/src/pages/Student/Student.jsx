@@ -1,33 +1,6 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import StudentSidebar from './StudentSidebar.jsx';
-
-export default function Student() {
-  const [wats, setWats] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [studentYear, setStudentYear] = useState('');
-  const [error, setError] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [submissions, setSubmissions] = useState([]);
-  const [studentId, setStudentId] = useState('');
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const year = localStorage.getItem('year');
-    const id = localStorage.getItem('_id'); // Changed from 'studentId' to '_id'
-    console.log("Year from localStorage:", year);
-    console.log("Student _id from localStorage:", id);
-    
-    if (year && id) {
-      setStudentYear(year);
-      setStudentId(id);
-    } else {
-      console.error('Student data not found in localStorage');
-=======
-import { useNavigate } from 'react-router-dom';
-import { FaBars, FaCheckCircle, FaEdit } from 'react-icons/fa';
+import { FaBars, FaCheckCircle, FaEdit, FaExclamationTriangle } from 'react-icons/fa';
 import axios from 'axios';
 import StudentSidebar from './StudentSidebar';
 
@@ -41,6 +14,7 @@ export default function Student() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [timeConflicts, setTimeConflicts] = useState([]);
 
   useEffect(() => {
     const year = localStorage.getItem('year');
@@ -52,7 +26,6 @@ export default function Student() {
       setStudentId(id);
       setStudentName(name || 'Student');
     } else {
->>>>>>> Final commit - project completed and ready for deployment
       setError('Student data not found. Please log in again.');
       setLoading(false);
       navigate('/student-login');
@@ -65,41 +38,24 @@ export default function Student() {
     const fetchData = async () => {
       setLoading(true);
       try {
-<<<<<<< HEAD
-        const [watsResponse, submissionsResponse] = await Promise.all([
-          axios.get(`http://localhost:4000/api/wats/active/by-year/${studentYear}`),
-          axios.get(`http://localhost:4000/api/wats/submissions/student/${studentId}`)
-        ]);
-        
-        console.log("WATs Response:", watsResponse.data);
-        console.log("Submissions Response:", submissionsResponse.data);
-        
-        setWats(watsResponse.data);
-        setSubmissions(submissionsResponse.data);
-        
-        if (!watsResponse.data || watsResponse.data.length === 0) {
-          setError('No active WATs found for your year');
-        }
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load data. Please try again later.');
-        if (err.response) {
-          console.error("Server responded with:", err.response.data);
-        }
-=======
         const [watsRes, subsRes] = await Promise.all([
           axios.get(`http://localhost:4000/api/wats/active/by-year/${studentYear}`),
           axios.get(`http://localhost:4000/api/wats/submissions/student/${studentId}`)
         ]);
+        
         setWats(watsRes.data);
         setSubmissions(subsRes.data);
+        
+        // Detect time conflicts
+        const conflicts = detectTimeConflicts(watsRes.data);
+        setTimeConflicts(conflicts);
+        
         if (!watsRes.data.length) {
           setError('No active WATs found for your year');
         }
       } catch (err) {
         console.error(err);
         setError('Failed to load WATs. Please try again.');
->>>>>>> Final commit - project completed and ready for deployment
       } finally {
         setLoading(false);
       }
@@ -108,106 +64,46 @@ export default function Student() {
     fetchData();
   }, [studentYear, studentId]);
 
-<<<<<<< HEAD
-  const hasAttempted = (watId) => {
-    return submissions.some(sub => sub.watId === watId);
+  const detectTimeConflicts = (wats) => {
+    const conflicts = [];
+    const sortedWats = [...wats].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+    
+    for (let i = 0; i < sortedWats.length - 1; i++) {
+      const currentEnd = new Date(sortedWats[i].endTime);
+      const nextStart = new Date(sortedWats[i + 1].startTime);
+      
+      if (currentEnd > nextStart) {
+        conflicts.push({
+          wat1: sortedWats[i],
+          wat2: sortedWats[i + 1],
+          conflictPeriod: {
+            start: nextStart,
+            end: currentEnd < new Date(sortedWats[i + 1].endTime) ? currentEnd : new Date(sortedWats[i + 1].endTime)
+          }
+        });
+      }
+    }
+    
+    return conflicts;
   };
 
-  if (error) {
-    return (
-      <div className="flex min-h-screen">
-        <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="flex-1 max-w-4xl mx-auto p-6 mt-8">
-          <h2 className="text-3xl font-bold text-center mb-6">Available WATs for {studentYear}</h2>
-          <p className="text-center text-500">{error}</p>
-        </div>
-      </div>
-    );
-  }
+  const formatDateTime = (dateString) => {
+    const options = { 
+      weekday: 'short', 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
+  };
 
-  return (
-    <div className="flex min-h-screen">
-      <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      
-      <div className="flex-1 overflow-auto">
-        <div className="max-w-4xl mx-auto p-6 mt-8">
-          <h2 className="text-3xl font-bold text-center mb-6">
-            Active WATs for {studentYear}
-          </h2>
-
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-12 space-y-3">
-              <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-100 border-t-blue-500"></div>
-              <p className="text-gray-500 font-medium text-sm">Loading WATs...</p>
-            </div>
-          ) : wats.length === 0 ? (
-            <div className="text-center py-12 px-6 bg-gray-50 rounded-lg max-w-md mx-auto">
-              <svg
-                className="mx-auto h-10 w-10 text-gray-400 animate-fade-in"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.2}
-                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <h3 className="mt-3 text-base font-medium text-gray-700">No Active WATs Found</h3>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {wats.map((wat) => {
-                const start = new Date(wat.startTime);
-                const end = new Date(wat.endTime);
-                const attempted = hasAttempted(wat._id);
-
-                return (
-                  <div key={wat._id} className={`border border-gray-300 rounded-lg p-4 shadow-md ${attempted ? 'bg-gray-50' : 'bg-white'}`}>
-                    <h3 className="text-xl font-semibold text-blue-700">
-                      {wat.subject} - WAT {wat.watNumber}
-                    </h3>
-                    <p><strong>Start Time:</strong> {start.toLocaleString()}</p>
-                    <p><strong>End Time:</strong> {end.toLocaleString()}</p>
-                    {attempted ? (
-                      <>
-                        <p className="text-sm text-green-600 mt-2 font-medium">You have already attempted this WAT</p>
-                        <button
-                          disabled
-                          className="mt-3 inline-block bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
-                        >
-                          Attempted
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-sm text-green-600 mt-2 font-medium">This WAT is currently active</p>
-                        <a
-                          href={`/wats/${wat._id}`}
-                          className="mt-3 inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                        >
-                          Attempt WAT
-                        </a>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-=======
   const hasAttempted = (watId) => submissions.some((s) => s.watId === watId);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Mobile Top Bar */}
       <div className="md:hidden p-4 bg-white shadow flex justify-between items-center">
         <button
@@ -228,7 +124,11 @@ export default function Student() {
           md:relative md:translate-x-0 transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
-          <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <div className="h-full flex flex-col">
+            <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+            {/* This pushes the sidebar content to extend to the bottom */}
+            <div className="flex-grow"></div>
+          </div>
         </div>
 
         {/* Overlay */}
@@ -253,9 +153,26 @@ export default function Student() {
               </p>
             </div>
 
+            {/* Time Conflicts Warning */}
+            {timeConflicts.length > 0 && (
+              <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r">
+                <div className="flex items-center">
+                  <FaExclamationTriangle className="text-yellow-400 mr-2" />
+                  <h3 className="font-bold text-yellow-800">Time Conflict Warning</h3>
+                </div>
+                <div className="ml-6 mt-2">
+                  {timeConflicts.map((conflict, index) => (
+                    <p key={index} className="text-yellow-700 text-sm mb-1">
+                      {conflict.wat1.subject} WAT{conflict.wat1.watNumber} and {conflict.wat2.subject} WAT{conflict.wat2.watNumber} overlap between {formatDateTime(conflict.conflictPeriod.start)} and {formatDateTime(conflict.conflictPeriod.end)}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Error / Loading */}
             {error ? (
-              <div className="text-center text-red-500 text-sm">{error}</div>
+              <div className="text-center text-sm">{error}</div>
             ) : loading ? (
               <div className="flex justify-center items-center py-10">
                 <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-100 border-t-blue-500"></div>
@@ -279,10 +196,10 @@ export default function Student() {
                         <h3 className="text-lg font-semibold text-gray-800">
                           {wat.subject} - WAT {wat.watNumber}
                         </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {new Date(wat.startTime).toLocaleString()} -{' '}
-                          {new Date(wat.endTime).toLocaleString()}
-                        </p>
+                        <div className="mt-2 text-sm text-gray-500">
+                          <p>Start: {formatDateTime(wat.startTime)}</p>
+                          <p>End: {formatDateTime(wat.endTime)}</p>
+                        </div>
                         {attempted ? (
                           <p className="mt-3 text-sm font-medium text-green-700">
                             Attempted ✅
@@ -307,4 +224,3 @@ export default function Student() {
     </div>
   );
 }
->>>>>>> Final commit - project completed and ready for deployment

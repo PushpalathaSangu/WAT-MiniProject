@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-
-
-=======
->>>>>>> Final commit - project completed and ready for deployment
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaBars } from 'react-icons/fa';
@@ -38,21 +33,6 @@ export default function CreateWAT() {
     const lines = pastedText.split('\n')
       .map(line => line.trim())
       .filter(line => line !== '');
-<<<<<<< HEAD
-  
-    let questionText = '';
-    let options = [];
-  
-    const optionPattern = /^[a-dA-D][).]\.?\s*(.*)/;
-    const questionPattern = /^\d+[).]\.?\s*(.*)/;
-  
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      
-      if (questionPattern.test(line)) {
-        questionText = line.replace(questionPattern, '$1').trim();
-      } 
-=======
 
     let questionText = '';
     let options = [];
@@ -66,7 +46,6 @@ export default function CreateWAT() {
       if (questionPattern.test(line)) {
         questionText = line.replace(questionPattern, '$1').trim();
       }
->>>>>>> Final commit - project completed and ready for deployment
       else if (optionPattern.test(line)) {
         const optionText = line.replace(optionPattern, '$1').trim();
         options.push(optionText);
@@ -82,19 +61,11 @@ export default function CreateWAT() {
         }
       }
     }
-<<<<<<< HEAD
-  
-    while (options.length < 4) {
-      options.push('');
-    }
-  
-=======
 
     while (options.length < 4) {
       options.push('');
     }
 
->>>>>>> Final commit - project completed and ready for deployment
     if (questionText) {
       setCurrentQuestion({
         questionId: currentQuestionIndex + 1,
@@ -153,11 +124,7 @@ export default function CreateWAT() {
         ...watData,
         facultyId: "67fb967dc29fd5b9ffa18577"
       });
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> Final commit - project completed and ready for deployment
       alert("✅ WAT Created Successfully!");
       window.location.href = "/faculty-dashboard";
     } catch (err) {
@@ -176,17 +143,6 @@ export default function CreateWAT() {
       }
     }
   };
-<<<<<<< HEAD
-  
-  const formatDate = (dateString) => {
-    const options = { 
-      weekday: 'short', 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit' 
-=======
 
   const formatDate = (dateString) => {
     const options = {
@@ -196,7 +152,6 @@ export default function CreateWAT() {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
->>>>>>> Final commit - project completed and ready for deployment
     };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
@@ -205,16 +160,10 @@ export default function CreateWAT() {
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Mobile Sidebar Toggle */}
       <div className="md:hidden p-4 bg-white shadow flex justify-between items-center">
-<<<<<<< HEAD
-        <button 
-          onClick={() => setSidebarOpen(!sidebarOpen)} 
-          className="text-blue-600 text-2xl"
-=======
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="text-blue-600 text-2xl"
           aria-label="Toggle sidebar"
->>>>>>> Final commit - project completed and ready for deployment
         >
           <FaBars />
         </button>
@@ -222,16 +171,6 @@ export default function CreateWAT() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-<<<<<<< HEAD
-        <FacultySidebar 
-          sidebarOpen={sidebarOpen} 
-          setSidebarOpen={setSidebarOpen} 
-        />
-
-        {/* Main Content */}
-        <main className="flex-1 p-6 overflow-y-auto">
-          <div className="max-w-2xl mx-auto mt-6 p-6 border rounded shadow bg-white">
-=======
         <FacultySidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
@@ -240,7 +179,6 @@ export default function CreateWAT() {
         {/* Main Content */}
         <main className="flex-1 p-4 md:p-6 overflow-y-auto">
           <div className="max-w-3xl mx-auto mt-6 p-6 border rounded shadow bg-white">
->>>>>>> Final commit - project completed and ready for deployment
             <h2 className="text-xl font-bold mb-4 text-center">Create WAT</h2>
 
             {step === 1 && (
@@ -258,14 +196,10 @@ export default function CreateWAT() {
                   <label className="block font-medium">Year:</label>
                   <div className="flex flex-wrap gap-4">
                     {['E1', 'E2', 'E3', 'E4'].map((year) => (
-<<<<<<< HEAD
-                      <label key={year} className="inline-flex items-center">
-=======
                       <label
                         key={year}
                         className="inline-flex items-center cursor-pointer"
                       >
->>>>>>> Final commit - project completed and ready for deployment
                         <input
                           type="radio"
                           name="year"
@@ -285,14 +219,10 @@ export default function CreateWAT() {
                   <label className="block font-medium">Semester:</label>
                   <div className="flex flex-wrap gap-4">
                     {['Sem1', 'Sem2'].map((sem) => (
-<<<<<<< HEAD
-                      <label key={sem} className="inline-flex items-center">
-=======
                       <label
                         key={sem}
                         className="inline-flex items-center cursor-pointer"
                       >
->>>>>>> Final commit - project completed and ready for deployment
                         <input
                           type="radio"
                           name="semester"
@@ -312,14 +242,10 @@ export default function CreateWAT() {
                   <label className="block font-medium">WAT Number:</label>
                   <div className="flex flex-wrap gap-4">
                     {['1', '2', '3', '4'].map((num) => (
-<<<<<<< HEAD
-                      <label key={num} className="inline-flex items-center">
-=======
                       <label
                         key={num}
                         className="inline-flex items-center cursor-pointer"
                       >
->>>>>>> Final commit - project completed and ready for deployment
                         <input
                           type="radio"
                           name="watNumber"
@@ -342,19 +268,12 @@ export default function CreateWAT() {
                   onChange={(e) => setTotalQuestions(parseInt(e.target.value))}
                   required
                   className="w-full border p-2 rounded"
-<<<<<<< HEAD
-                />
-
-                <button 
-                  type="submit" 
-=======
                   min="1"
                   max="100"
                 />
 
                 <button
                   type="submit"
->>>>>>> Final commit - project completed and ready for deployment
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full"
                 >
                   Next
@@ -372,13 +291,8 @@ export default function CreateWAT() {
                     setPastedInput(e.target.value);
                     handlePasteQuestion(e);
                   }}
-<<<<<<< HEAD
-                  className="w-full border p-2 mb-2 rounded"
-                  rows="5"
-=======
                   className="w-full border p-2 mb-2 rounded resize-none"
                   rows={5}
->>>>>>> Final commit - project completed and ready for deployment
                 />
                 <div className="mb-2">
                   <label className="block">Question:</label>
@@ -416,13 +330,8 @@ export default function CreateWAT() {
                   className="w-full border p-2 mb-4 rounded"
                   required
                 />
-<<<<<<< HEAD
-                <button 
-                  onClick={handleQuestionSubmit} 
-=======
                 <button
                   onClick={handleQuestionSubmit}
->>>>>>> Final commit - project completed and ready for deployment
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full"
                 >
                   {currentQuestionIndex + 1 === totalQuestions ? 'Next (Timing)' : 'Next Question'}
@@ -449,13 +358,8 @@ export default function CreateWAT() {
                   required
                   className="w-full border p-2 rounded"
                 />
-<<<<<<< HEAD
-                <button 
-                  type="submit" 
-=======
                 <button
                   type="submit"
->>>>>>> Final commit - project completed and ready for deployment
                   className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full"
                 >
                   Submit WAT
@@ -467,8 +371,4 @@ export default function CreateWAT() {
       </div>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Final commit - project completed and ready for deployment

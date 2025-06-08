@@ -66,30 +66,6 @@ export default function FacultyWatResults() {
     (result) =>
       result.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       result.studentId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-<<<<<<< HEAD
-      (result.email &&
-        result.email.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
-  const downloadResults = () => {
-    // Create CSV content
-    let csvContent = "data:text/csv;charset=utf-8,";
-
-    // Add headers
-    csvContent += "Roll No,Student ID,Name,Email,Score\n";
-
-    // Add data rows
-    results.forEach((result) => {
-      csvContent += `${result.studentId},${result.rollNumber},${
-        result.studentName
-      },${result.email || "N/A"},${result.score}\n`;
-    });
-
-    // Create download link
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-=======
       (result.email && result.email.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
@@ -107,7 +83,6 @@ export default function FacultyWatResults() {
       "href",
       encodedUri
     );
->>>>>>> Final commit - project completed and ready for deployment
     link.setAttribute(
       "download",
       `${watDetails?.subject}_WAT${watDetails?.watNumber}_results.csv`
@@ -118,72 +93,6 @@ export default function FacultyWatResults() {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex min-h-screen bg-gray-50">
-      <FacultySidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
-
-      {/* Mobile Header */}
-      <div className="md:hidden p-4 bg-white shadow-sm flex items-center">
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="text-blue-600 mr-4"
-        >
-          <FaBars size={20} />
-        </button>
-        <button onClick={() => navigate(-1)} className="text-blue-600 mr-4">
-          <FaArrowLeft size={20} />
-        </button>
-        <h1 className="text-xl font-bold text-blue-800">WAT Results</h1>
-      </div>
-
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <button
-                onClick={() => navigate(-1)}
-                className="flex items-center text-blue-600 hover:text-blue-800 mb-2"
-              >
-                <FaArrowLeft className="mr-2" />
-                Back to WATs
-              </button>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-                WAT Results
-              </h1>
-              {watDetails && (
-                <div className="mt-2 text-blue-600">
-                  <p className="font-medium">
-                    {watDetails.subject} - {watDetails.watNumber}
-                  </p>
-                  <p className="text-sm">
-                    Year : {watDetails.year} • Semester: {watDetails.semester}
-                  </p>
-                  <p className="text-sm">
-                    Total Questions: {watDetails.questions.length}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-          ) : error ? (
-            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
-              <p>{error}</p>
-            </div>
-          ) : (
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                  <div className="mb-4 md:mb-0">
-=======
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Mobile Top Bar */}
       <div className="md:hidden p-4 bg-white shadow flex justify-between items-center">
@@ -274,154 +183,37 @@ export default function FacultyWatResults() {
                 {/* Controls */}
                 <div className="p-6 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
->>>>>>> Final commit - project completed and ready for deployment
                     <h2 className="text-lg font-semibold text-gray-800">
                       Student Results
                     </h2>
                     <p className="text-sm text-gray-600">
-<<<<<<< HEAD
-                      {results.length} students attempted this WAT
-                    </p>
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="relative">
-=======
                       {results.length} student{results.length !== 1 ? "s" : ""} attempted this WAT
                     </p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <div className="relative flex-grow sm:flex-grow-0">
->>>>>>> Final commit - project completed and ready for deployment
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <FaSearch className="text-gray-400" />
                       </div>
                       <input
                         type="text"
                         placeholder="Search students..."
-<<<<<<< HEAD
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-=======
                         className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         aria-label="Search Students"
->>>>>>> Final commit - project completed and ready for deployment
                       />
                     </div>
                     <button
                       onClick={downloadResults}
-<<<<<<< HEAD
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center justify-center text-sm"
-=======
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center justify-center text-sm whitespace-nowrap"
                       aria-label="Export Results as CSV"
->>>>>>> Final commit - project completed and ready for deployment
                     >
                       <FaFileDownload className="mr-2" />
                       Export Results
                     </button>
                   </div>
                 </div>
-<<<<<<< HEAD
-              </div>
-
-              {filteredResults.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Student ID
-                        </th>
-
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Name
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Email
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Roll No
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Score
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredResults.map((result, index) => (
-                        <tr
-                          key={result._id}
-                          className={
-                            index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                          }
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                            {result.studentId}
-                          </td>
-
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                            {result.studentName}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                            {result.email || "N/A"}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                            {result.rollNumber}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                            {result.score} / {watDetails.questions.length}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="p-8 text-center">
-                  <div className="inline-block p-4 bg-gray-100 rounded-full mb-4">
-                    <FaUserGraduate className="text-gray-500 text-3xl" />
-                  </div>
-                  <h3 className="text-lg font-medium text-gray-700 mb-2">
-                    {searchTerm
-                      ? "No matching students found"
-                      : "No students attempted this WAT yet"}
-                  </h3>
-                  {searchTerm && (
-                    <button
-                      onClick={() => setSearchTerm("")}
-                      className="text-blue-600 hover:text-blue-800 text-sm"
-                    >
-                      Clear search
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
-  );
-}
-=======
 
                 {/* Results Table */}
                 {filteredResults.length > 0 ? (
@@ -499,4 +291,3 @@ export default function FacultyWatResults() {
     </div>
   );
 } 
->>>>>>> Final commit - project completed and ready for deployment

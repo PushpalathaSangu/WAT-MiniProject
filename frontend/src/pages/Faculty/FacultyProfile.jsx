@@ -25,18 +25,10 @@ export default function FacultyProfile() {
         },
       })
       .then((response) => {
-<<<<<<< HEAD
-        console.log('Faculty data:', response.data); // Debug
-=======
->>>>>>> Final commit - project completed and ready for deployment
         setFaculty(response.data);
         setLoading(false);
       })
       .catch((err) => {
-<<<<<<< HEAD
-        console.error('Error fetching faculty profile:', err);
-=======
->>>>>>> Final commit - project completed and ready for deployment
         setError(
           err.response?.data?.message ||
             'Failed to fetch faculty profile. Please try again later.'
@@ -62,10 +54,7 @@ export default function FacultyProfile() {
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="text-blue-600 text-2xl"
-<<<<<<< HEAD
-=======
           aria-label="Toggle sidebar"
->>>>>>> Final commit - project completed and ready for deployment
         >
           <FaBars />
         </button>
@@ -74,9 +63,6 @@ export default function FacultyProfile() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-<<<<<<< HEAD
-        <FacultySidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-=======
         <div
           className={`
             fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-md transform
@@ -98,7 +84,6 @@ export default function FacultyProfile() {
             aria-hidden="true"
           ></div>
         )}
->>>>>>> Final commit - project completed and ready for deployment
 
         {/* Profile Content */}
         <main className="flex-1 p-6 overflow-y-auto">
@@ -112,40 +97,15 @@ export default function FacultyProfile() {
                 {faculty?.name?.charAt(0).toUpperCase()}
               </div>
 
-<<<<<<< HEAD
-              <h2 className="mt-4 text-xl font-bold text-blue-600">{faculty?.name}</h2>
-=======
               <h2 className="mt-4 text-xl font-bold text-blue-600">
                 {faculty?.name}
               </h2>
->>>>>>> Final commit - project completed and ready for deployment
               <p className="mt-2 text-gray-600">Email: {faculty?.email}</p>
               <p className="mt-2 text-gray-600">Contact: {faculty?.contact}</p>
               <p className="mt-2 text-gray-600 mr-5">Assigned subjects:</p>
 
               {/* Assigned Years and Subjects */}
               <div className="mt-4 w-full max-w-xl text-center">
-<<<<<<< HEAD
-                {faculty?.assignedSubjects && faculty.assignedSubjects.length > 0 ? (
-                  Object.entries(groupSubjectsByYear(faculty.assignedSubjects)).map(
-                    ([year, subjects]) => (
-                      <div key={year} className="mb-4">
-                        <div className="flex justify-center gap-2 w-full">
-                          <div className="text-center">
-                            <span className="font-semibold text-blue-600">{year}:</span>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            {subjects.map((subject, index) => (
-                              <div key={index} className="text-gray-600">
-                                {subject}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  )
-=======
                 {faculty?.assignedSubjects &&
                 faculty.assignedSubjects.length > 0 ? (
                   Object.entries(
@@ -168,7 +128,6 @@ export default function FacultyProfile() {
                       </div>
                     </div>
                   ))
->>>>>>> Final commit - project completed and ready for deployment
                 ) : (
                   <p className="text-gray-500">No assigned subjects found.</p>
                 )}

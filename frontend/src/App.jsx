@@ -33,7 +33,7 @@ import StudentProfileUpdate from "./pages/Student/StudentUpdate.jsx";
 import WATAttemptPage from './pages/Student/WatAttemptPage.jsx';
 import ViewMarks from "./pages/Student/ViewMarks.jsx";
 import ViewWats from "./pages/Student/ViewWats.jsx";
-import CompletedWats from "./pages/Student/CompletedWats.jsx";
+
 
 
 // Faculty
@@ -44,17 +44,11 @@ import FacultyUpdateProfile from './pages/Faculty/FacultyUpdateProfile.jsx';
 import StudentsDetails from './pages/Faculty/StudentsDetails.jsx';
 import StudentYearDetails from './pages/Faculty/StudentYearDetails.jsx';
 import CreateWATPage from './pages/Faculty/CreateWatPage.jsx';
-import CreateWatUsePdf from './pages/Faculty/CreateWatUsePdf.jsx';
 import FacultyViewYears from "./pages/Faculty/FacultyViewYears.jsx";
 import FacultyWATsByYear from "./pages/Faculty/FacultyWatsByYear.jsx";
-// import FacultyStudentDetails from "./pages/Faculty/FacultyStudentDetails.jsx";
 import SectionDetails from "./pages/Faculty/SectionDetails.jsx";
 import StudentsList from "./pages/Faculty/StudentsList.jsx";
-<<<<<<< HEAD
-import GenerateMCQs  from './pages/Faculty/GenerateMcqs.jsx';
-=======
 import GenerateMcqs  from './pages/Faculty/GenerateMcqs.jsx';
->>>>>>> Final commit - project completed and ready for deployment
 import FacultyWatResults from './pages/Faculty/FacultyWatResults.jsx';
 
 const App = () => {
@@ -81,29 +75,22 @@ const App = () => {
           <Route path="/student/wats" element={<ViewWats/>}/>
           <Route path="/student/wat-marks" element={<ViewMarks/>}/>
           <Route path="/wats/:id" element={<WATAttemptPage />} />
-          <Route path="/student/completed-wats" element={<CompletedWats/>} />
+      
           
 
           {/* Faculty Routes */}
           <Route path="/faculty-dashboard" element={<Faculty />} />
           <Route path="/faculty/profile" element={<FacultyProfile />} />
           <Route path="/faculty/update-profile" element={<FacultyUpdateProfile />} />
-         
           <Route path="faculty/create-wat" element={<CreateWATPage />} />
-          <Route path="/faculty/create-wat-using-pdf" element={<CreateWatUsePdf />} />
           <Route path="/faculty/students-details" element={<StudentsDetails  />} />
           <Route path="/faculty/students/year/:year" element={<StudentYearDetails />} />
           <Route path="/faculty/view-wats" element={<FacultyViewYears />} />
           <Route path="/faculty/view-wats/:year" element={<FacultyWATsByYear />} />
-          {/* <Route path="/faculty/student-details" element={<FacultyStudentDetails />} /> */}
           <Route path="/faculty/student-details/:year" element={<SectionDetails />} />
           <Route path="/faculty/student-details/:year/:section" element={<StudentsList />} />
           <Route path="/faculty/students/year/:year" element={<StudentYearDetails />} />
-<<<<<<< HEAD
-          <Route path="/faculty/mcqs" element={<GenerateMCQs/>} />
-=======
           <Route path="/faculty/mcqs" element={<GenerateMcqs/>} />
->>>>>>> Final commit - project completed and ready for deployment
           <Route path="/faculty/wat-results/:watId" element={<FacultyWatResults />} />
 
           {/* Admin Routes */}

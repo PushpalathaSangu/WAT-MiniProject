@@ -370,64 +370,6 @@ export default function ViewWats() {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex min-h-screen bg-gray-50">
-      <StudentSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      
-      {/* Mobile Header */}
-      <div className="md:hidden p-4 bg-white shadow-sm flex items-center">
-        <button 
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="text-blue-600 mr-4"
-        >
-          <FaBars size={20} />
-        </button>
-        <h1 className="text-xl font-bold text-blue-800">WAT Examinations</h1>
-      </div>
-
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-              Weekly Assessment Tests ({studentYear})
-            </h1>
-            <div className="flex items-center text-sm text-gray-500">
-              <FaClock className="mr-1" />
-              {currentTime.toLocaleDateString()}
-            </div>
-          </div>
-
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-          ) : error ? (
-            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
-              <p>{error}</p>
-            </div>
-          ) : wats.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="inline-block p-4 bg-blue-100 rounded-full mb-4">
-                <FaBook className="text-blue-500 text-3xl" />
-              </div>
-              <h3 className="text-xl font-medium text-gray-700 mb-2">
-                No WATs Scheduled
-              </h3>
-              <p className="text-gray-500">
-                There are currently no WATs available for your year.
-              </p>
-            </div>
-          ) : (
-            <>
-              {renderWatSection("Active WATs", active, 'active')}
-              {renderWatSection("Upcoming WATs", upcoming, 'upcoming')}
-              {renderWatSection("Completed WATs", completed, 'completed')}
-            </>
-          )}
-        </div>
-      </main>
-=======
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Mobile Top Bar */}
       <div className="md:hidden p-4 bg-white shadow flex justify-between items-center">
@@ -508,7 +450,6 @@ export default function ViewWats() {
           </div>
         </main>
       </div>
->>>>>>> Final commit - project completed and ready for deployment
     </div>
   );
 }

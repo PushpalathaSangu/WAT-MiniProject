@@ -95,12 +95,6 @@ router.get('/profile', authenticateToken, async (req, res) => {
 
 
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> Final commit - project completed and ready for deployment
 // =======================
 // Admin Profile (Update)
 // =======================
@@ -174,24 +168,4 @@ router.put("/update", authenticateToken,authorizeRole('admin'),async (req, res) 
   }
 });
 
-<<<<<<< HEAD
-
-
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-module.exports = router;
->>>>>>> Final commit - project completed and ready for deployment
