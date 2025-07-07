@@ -1,5 +1,3 @@
-
-
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const WAT = require("../models/Wat"); // Make sure this path is correct
 require("dotenv").config();
